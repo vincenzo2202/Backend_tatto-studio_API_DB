@@ -5,6 +5,7 @@ import { RolesTableMigration1698262215631 } from "./migration/1698262215631-role
 import { RoleUserTableMigration1698262405828 } from "./migration/1698262405828-role_user_table_migration"
 import { ClientsTableMigration1698263101535 } from "./migration/1698263101535-clients_table_migration"
 import { WorkersTableMigration1698263348343 } from "./migration/1698263348343-workers_table_migration"
+import { AppointmentsTableMigration1698263590602 } from "./migration/1698263590602-appointments_table_migration"
 
 export const AppDataSource = new DataSource({
  type: "mysql",
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
  password: "1234",
  database: "tattoo_studio_backend_db",
  entities: [],
- migrations:[UsersTableMigration1698262021256,RolesTableMigration1698262215631,RoleUserTableMigration1698262405828,ClientsTableMigration1698263101535,WorkersTableMigration1698263348343],
+ migrations:[UsersTableMigration1698262021256,RolesTableMigration1698262215631,RoleUserTableMigration1698262405828,ClientsTableMigration1698263101535,WorkersTableMigration1698263348343,AppointmentsTableMigration1698263590602],
  synchronize: false,
  logging: false,
 })
