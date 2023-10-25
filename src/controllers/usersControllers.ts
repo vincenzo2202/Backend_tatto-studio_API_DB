@@ -1,18 +1,20 @@
-import { Request, Response } from "express"
+import { Request, Response } from "express-serve-static-core"
 
+const register = (req:Request, res: Response) => {
 
-const register = (req:Request, res: Response) =>{
-return res.json(`USERS`)
 }
-const login = (req:Request, res: Response)=>{
-return res.json(`USERS`)
-} 
-const profile = (req:Request, res: Response)=>{
-return res.json(`USERS`)
-} 
-const updateUser = (req:Request, res: Response)=>{
-return res.json(`USERS`)
-} 
+const login = (req:Request, res: Response) => {
 
+}
+const profile = (req:Request, res: Response) => {
 
-export { register,login,profile,updateUser}
+}
+const updateUser = (req:Request, res: Response) => {
+
+}
+
+const getAllUsers = (req:Request, res: Response) => {
+
+}
+
+export {register, login, profile, updateUser, getAllUsers} 

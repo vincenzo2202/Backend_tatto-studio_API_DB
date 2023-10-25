@@ -1,13 +1,20 @@
-import express from "express";
-import { usersRoutes } from "./routes/usersRoutes";
+import express from "express"; 
+import { AppDataSource } from "./db";
+import { userRoutes } from "./routes/usersRoutes";
 
-const app = express();
-const PORT = process.env.PORT || 3000
+const app = express()
+const PORT = process.env.PORT || 4000
 
 app.use(express.json())
-app.use("/user", usersRoutes);
+app.use("/user", userRoutes)
 
-
-app.listen(PORT,()=>{
-    console.log(`Server Running on: ${PORT}`);
-})
+AppDataSource.initialize()
+.then(() => {
+    console.log('Database connected');
+    app.listen(PORT, ()=>{
+        console.log("running server on " + PORT);
+    })
+    })
+    .catch(error => {
+        console.log(error);
+    });

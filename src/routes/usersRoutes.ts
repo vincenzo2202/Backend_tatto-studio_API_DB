@@ -1,20 +1,13 @@
-import { Router } from "express";  
-import { login, profile, register, updateUser } from "../controllers/usersControllers";
+import { Router } from "express";
+import { register, login, profile, updateUser, getAllUsers } from "../controllers/usersControllers";
 
-const usersRoutes = Router()
+const userRoutes = Router();
 
-//registro de usuarios 
-usersRoutes.post("/register", register)
-//login de usuarios
-usersRoutes.post("/login", login)
-//perfil de usuario
-usersRoutes.get("/profile", profile)
-//modificacion de perfil
-usersRoutes.put("/:id", updateUser)
+userRoutes.post('/register', register)
+userRoutes.post('/login', login)
+userRoutes.get('/profile', profile)
+userRoutes.put('/update', updateUser)
+userRoutes
+userRoutes.get('/all', getAllUsers)
 
-// get all users
-usersRoutes 
-
-
-
-export {usersRoutes}
+export {userRoutes}
