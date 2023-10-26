@@ -33,6 +33,6 @@ user!: User;
     },
 
 })
-userRoles!: Worker[];
+clientWorkers!: Worker[];
 
 }
