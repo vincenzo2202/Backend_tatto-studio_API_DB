@@ -72,7 +72,7 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if (createUserBody.phone_number > 20) {
+        if (createUserBody.phone_number.length > 20) {
             return res.json({
                 success: true,
                 mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
