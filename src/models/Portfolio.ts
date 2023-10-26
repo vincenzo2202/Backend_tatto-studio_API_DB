@@ -1,4 +1,5 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm"
+import { Worker } from "./Worker"
 
 @Entity("portfolio")
 export class Portfolio extends BaseEntity {

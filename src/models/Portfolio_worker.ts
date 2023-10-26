@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm"
 
-@Entity("portfolio")
-export class Portfolio extends BaseEntity {
+@Entity("portfolio_worker")
+export class Portfolio_worker extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
   
