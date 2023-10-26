@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm"
 
 @Entity("portfolio")
 export class Portfolio extends BaseEntity {
@@ -17,4 +17,5 @@ export class Portfolio extends BaseEntity {
     @Column()
     updated_at!: Date
 
-}
+  
+    }
