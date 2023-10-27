@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class ClientsTableMigration1698263101535 implements MigrationInterface {
+export class AppointmentPortfolio1698416412420 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "clients",
+                name: "appointment_portfolio",
                 columns: [
                     {
                         name: "id",
@@ -15,9 +15,14 @@ export class ClientsTableMigration1698263101535 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "user_id",
+                        name: "appointment_id",
                         type: "int",
-                        isNullable: false
+                        isNullable: false,
+                    },
+                    {
+                        name: "portfolio_id",
+                        type: "int",
+                        isNullable: false,
                     },
                     {
                         name: "created_at",
@@ -33,8 +38,14 @@ export class ClientsTableMigration1698263101535 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["user_id"],
-                        referencedTableName: "users",
+                        columnNames: ["appointment_id"],
+                        referencedTableName: "appointments",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    },
+                    {
+                        columnNames: ["portfolio_id"],
+                        referencedTableName: "portfolio",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     }
@@ -42,11 +53,10 @@ export class ClientsTableMigration1698263101535 implements MigrationInterface {
             }),
             true
         );
-
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("clients")
+        await queryRunner.dropTable("appointment_portfolio")
     }
 
 }

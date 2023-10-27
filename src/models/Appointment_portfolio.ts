@@ -1,7 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity("portfolio_worker")
-export class Portfolio_worker extends BaseEntity {
+export class Appointment_portfolio extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
   
@@ -9,7 +9,7 @@ export class Portfolio_worker extends BaseEntity {
     portfolio_id!: number
 
     @Column()
-    worker_id!: number
+    appointment_id!: number
     
     @Column()
     created_at!: Date

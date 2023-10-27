@@ -1,11 +1,13 @@
 import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt"
+import { Role_user } from "../models/Role_user";
+import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
 
     try {
-        const createUserBody = req.body; 
+        const createUserBody = req.body;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
@@ -88,6 +90,10 @@ const register = async (req: Request, res: Response) => {
             phone_number: createUserBody.phone_number
         }).save()
 
+        const newRole_User = await Role_user.create({
+            user_id: newUser.id,
+        }).save()
+
         return res.json({
             success: true,
             message: "User registered successfully.",
@@ -106,9 +112,57 @@ const register = async (req: Request, res: Response) => {
         })
     }
 }
-const login = (req: Request, res: Response) => {
 
+const login = async (req: Request, res: Response) => {
+
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const loginByEmail = await User.findOne({
+            where: { email },
+            relations: ["userRoles"]
+        });
+
+        if (!loginByEmail) {
+            return res.json({
+                success: true,
+                message: "user or password incorrect"
+            })
+        }
+
+        if (!bcrypt.compareSync(password, loginByEmail.password)) {
+            return res.json({
+                success: true,
+                message: "user or password incorrect"
+            })
+        }
+
+        const roles = loginByEmail.userRoles.map(role => role.role);
+
+        const token = jwt.sign({
+            id: loginByEmail.id,
+            email: loginByEmail.email,
+            role: roles
+        }, "secreto", {
+            expiresIn: "5h"
+        })
+
+        return res.json({
+            success: true,
+            message: "user logged succesfully",
+            token: token
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "user can't by logged",
+            error
+        })
+    }
 }
+
 const profile = (req: Request, res: Response) => {
 
 }

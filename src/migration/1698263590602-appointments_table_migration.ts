@@ -54,13 +54,13 @@ export class AppointmentsTableMigration1698263590602 implements MigrationInterfa
                 foreignKeys: [
                     {
                         columnNames: ["client_id"],
-                        referencedTableName: "clients",
+                        referencedTableName: "users",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     },
                     {
                         columnNames: ["worker_id"],
-                        referencedTableName: "workers",
+                        referencedTableName: "users",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     }
