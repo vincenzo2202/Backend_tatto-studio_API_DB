@@ -119,46 +119,46 @@ const login = async (req: Request, res: Response) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const loginByEmail = await User.findOne({
+        const loginBy = await User.findOne({
             where: { email },
             relations: ["userRoles"]
         });
 
-        if (!loginByEmail) {
+        if (!loginBy) {
             return res.json({
                 success: true,
-                message: "user or password incorrect"
+                message: "User or password incorrect"
             })
         }
 
-        if (!bcrypt.compareSync(password, loginByEmail.password)) {
+        if (!bcrypt.compareSync(password, loginBy.password)) {
             return res.json({
                 success: true,
-                message: "user or password incorrect"
+                message: "User or password incorrect"
             })
         }
 
-        const roles = loginByEmail.userRoles.map(role => role.role);
+        const roles = loginBy.userRoles.map(role => role.role);
 
         const token = jwt.sign({
-            id: loginByEmail.id,
-            email: loginByEmail.email,
+            id: loginBy.id,
+            email: loginBy.email,
             role: roles
-        }, "secreto", {
-            expiresIn: "5h"
+        }, "tattoStore", {
+            expiresIn: "3h"
         })
 
         return res.json({
             success: true,
-            message: "user logged succesfully",
+            message: "User logged succesfully",
             token: token
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "user can't by logged",
-            error
+            message: "User can't by logged",
+            error: error
         })
     }
 }
