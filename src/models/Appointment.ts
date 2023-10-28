@@ -19,6 +19,9 @@ export class Appointment extends BaseEntity {
     worker_id!: number
 
     @Column()
+    client_id!: number
+
+    @Column()
     created_at!: Date
 
     @Column()
