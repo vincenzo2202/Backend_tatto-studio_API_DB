@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class UsersTableMigration1698262021256 implements MigrationInterface {
-
+export class RolesTableMigration1698496675919 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "users",
+                name: "roles",
                 columns: [
                     {
                         name: "id",
@@ -15,34 +14,15 @@ export class UsersTableMigration1698262021256 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "full_name",
+                        name: "role",
+                        type: "enum",
+                        enum: ["user", "admin", "super_admin"],
+                        default: `"user"`
+                    },
+                    {
+                        name: "privilege",
                         type: "varchar",
-                        length: "50",
-                        isNullable: false
-                    },
-                    {
-                        name: "email",
-                        type: "varchar",
-                        length: "100",
-                        isUnique: true,
-                        isNullable: false
-                    },
-                    {
-                        name: "password",
-                        type: "varchar",
-                        length: "100",
-                        isNullable: false
-                    },
-                    {
-                        name: "phone_number",
-                        type: "int",
-                        length: "20",
-                        isNullable: false
-                    },
-                    {
-                        name: "is_active",
-                        type: "boolean",
-                        default: true
+                        length: "255",
                     },
                     {
                         name: "created_at",
@@ -62,7 +42,7 @@ export class UsersTableMigration1698262021256 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("users")
+        await queryRunner.dropTable("roles")
     }
 
 }

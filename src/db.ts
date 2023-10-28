@@ -1,18 +1,16 @@
 import "reflect-metadata"
-import { DataSource } from "typeorm"
-import { UsersTableMigration1698262021256 } from "./migration/1698262021256-users_table_migration"
-import { RolesTableMigration1698262215631 } from "./migration/1698262215631-roles_table_migration"
-import { RoleUserTableMigration1698262405828 } from "./migration/1698262405828-role_user_table_migration"
-import { AppointmentsTableMigration1698263590602 } from "./migration/1698263590602-appointments_table_migration"
-import { PortfolioTableMigration1698264002723 } from "./migration/1698264002723-portfolio_table_migration" 
+import { DataSource } from "typeorm" 
 
 import { Appointment } from "./models/Appointment"
 import { Appointment_portfolio} from "./models/Appointment_portfolio"
 import { Portfolio } from "./models/Portfolio"
 import { Role } from "./models/Role"
-import { Role_user } from "./models/Role_user"
-import { User } from "./models/User" 
-import { AppointmentPortfolio1698416412420 } from "./migration/1698416412420-appointment_portfolio"
+import { User } from "./models/User"  
+import { RolesTableMigration1698496675919 } from "./migration/1698496675919-roles_table_migration"
+import { UsersTableMigration1698496766134 } from "./migration/1698496766134-users_table_migration"
+import { AppointmentsTableMigration1698496826651 } from "./migration/1698496826651-appointments_table_migration"
+import { PortfolioTableMigration1698496868123 } from "./migration/1698496868123-portfolio_table_migration"
+import { AppointmentPortfolioTableMigration1698496932444 } from "./migration/1698496932444-appointment_portfolio_table_migration"
 
 export const AppDataSource = new DataSource({
  type: "mysql",
@@ -21,8 +19,9 @@ export const AppDataSource = new DataSource({
  username: "root",
  password: "1234",
  database: "tattoo_studio_backend_db",
- entities: [Appointment,Appointment_portfolio, Portfolio, Role_user,Role, User],
- migrations:[UsersTableMigration1698262021256,RolesTableMigration1698262215631,RoleUserTableMigration1698262405828,AppointmentsTableMigration1698263590602,PortfolioTableMigration1698264002723,AppointmentPortfolio1698416412420],
+ entities: [Appointment,Appointment_portfolio, Portfolio,Role, User],
+ migrations:[RolesTableMigration1698496675919,UsersTableMigration1698496766134,AppointmentsTableMigration1698496826651,PortfolioTableMigration1698496868123,AppointmentPortfolioTableMigration1698496932444
+ ],
  synchronize: false,
  logging: false,
 })

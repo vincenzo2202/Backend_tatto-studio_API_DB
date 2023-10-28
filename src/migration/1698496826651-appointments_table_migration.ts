@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class AppointmentsTableMigration1698263590602 implements MigrationInterface {
+export class AppointmentsTableMigration1698496826651 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -65,14 +65,15 @@ export class AppointmentsTableMigration1698263590602 implements MigrationInterfa
                         onDelete: "CASCADE",
                     }
                 ]
- 
+    
             }),
             true
             );
     }
-
+    
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("appointments")
     }
-
-}
+    
+    }
+    

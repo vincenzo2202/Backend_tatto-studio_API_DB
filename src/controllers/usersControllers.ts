@@ -1,83 +1,82 @@
 import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
-import bcrypt from "bcrypt"
-import { Role_user } from "../models/Role_user";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"; 
 
 const register = async (req: Request, res: Response) => {
 
     try {
-        const createUserBody = req.body;
+        const createUserBody = req.body; 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
         if (typeof (createUserBody.full_name) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
+                mensaje: 'name incorrect, you can put only strings, try again'
             });
         }
 
         if (createUserBody.full_name.length > 50) {
             return res.json({
                 success: true,
-                mensaje: 'Name is too long. Please insert a shorter name (maximum 50 characters).'
+                mensaje: 'name too long, try to insert a shorter name, max 50 characters'
             });
         }
 
         if (typeof (createUserBody.email) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Email is incorrect; only strings are allowed. Please try again'
+                mensaje: 'email incorrect, you can put only strings, try again'
             });
         }
 
         if (createUserBody.email.length > 100) {
             return res.json({
                 success: true,
-                mensaje: 'Name is too long. Please insert a shorter name (maximum 100 characters).'
+                mensaje: 'name too long, try to insert a shorter name, max 100 characters'
             });
         }
 
         if (!emailRegex.test(req.body.email)) {
             return res.json({
                 success: true,
-                mensaje: 'Email is incorrect. Please try again.'
+                mensaje: 'email incorrect, try again'
             });
         }
 
         if (typeof (createUserBody.password) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Password is incorrect; only strings are allowed. Please try again'
+                mensaje: 'password incorrect, you can put only strings, try again'
             });
         }
 
         if (createUserBody.password.length > 100) {
             return res.json({
                 success: true,
-                mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
+                mensaje: 'password too long, try to insert a shorter name, max 100 characters'
             });
         }
 
         if (!passwordRegex.test(req.body.password)) {
             return res.json({
                 success: true,
-                mensaje: 'Password is incorrect. Please try again'
+                mensaje: 'password incorrect, try again'
             });
         }
 
         if (typeof (createUserBody.phone_number) !== "number") {
             return res.json({
                 success: true,
-                mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
+                mensaje: 'phone_number incorrect, you can put only numbers, try again'
             });
         }
 
         if (createUserBody.phone_number.length > 20) {
             return res.json({
                 success: true,
-                mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
+                mensaje: 'phone_number too long, try to insert a shorter name, max 20 characters'
             });
         }
 
@@ -88,26 +87,22 @@ const register = async (req: Request, res: Response) => {
             email: createUserBody.email,
             password: encrytedPassword,
             phone_number: createUserBody.phone_number
-        }).save()
-
-        const newRole_User = await Role_user.create({
-            user_id: newUser.id,
-        }).save()
+        }).save() 
 
         return res.json({
             success: true,
-            message: "User registered successfully.",
+            message: "user registered succesfully",
             data: {
-                full_name: createUserBody.full_name,
-                email: createUserBody.email,
-                phone_number: createUserBody.phone_number
+                full_name: newUser.full_name,
+                email: newUser.email,
+                phone_number: newUser.phone_number
             }
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "User can't be registered, please try again.",
+            message: "user can't be registered, try again",
             error
         })
     }
@@ -119,46 +114,46 @@ const login = async (req: Request, res: Response) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const loginBy = await User.findOne({
+        const loginByEmail = await User.findOne({
             where: { email },
-            relations: ["userRoles"]
+            relations: ["role"]
         });
 
-        if (!loginBy) {
+        if (!loginByEmail) {
             return res.json({
                 success: true,
-                message: "User or password incorrect"
+                message: "user or password incorrect"
             })
         }
 
-        if (!bcrypt.compareSync(password, loginBy.password)) {
+        if (!bcrypt.compareSync(password, loginByEmail.password)) {
             return res.json({
                 success: true,
-                message: "User or password incorrect"
+                message: "user or password incorrect"
             })
         }
 
-        const roles = loginBy.userRoles.map(role => role.role);
+        const roles = loginByEmail.role.map(role => role.role);
 
         const token = jwt.sign({
-            id: loginBy.id,
-            email: loginBy.email,
+            id: loginByEmail.id,
+            email: loginByEmail.email,
             role: roles
-        }, "tattoStore", {
+        }, "secreto", {
             expiresIn: "3h"
         })
 
         return res.json({
             success: true,
-            message: "User logged succesfully",
+            message: "user logged succesfully",
             token: token
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "User can't by logged",
-            error: error
+            message: "user can't by logged",
+            error
         })
     }
 }
@@ -189,11 +184,94 @@ const profile = async (req: Request, res: Response) => {
         })
     }
 }
-const updateUser = (req: Request, res: Response) => {
 
+const updateUser = async (req: Request, res: Response) => {
+
+    try {
+        const bodyUser = req.body
+        const id = req.token.id
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
+
+        if (typeof (bodyUser.full_name) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
+            });
+        }
+
+        if (bodyUser.full_name.length > 50) {
+            return res.json({
+                success: true,
+                mensaje: 'Name is too long. Please insert a shorter name (maximum 50 characters).'
+            });
+        }
+
+        if (typeof (bodyUser.password) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'Password is incorrect; only strings are allowed. Please try again'
+            });
+        }
+
+        if (bodyUser.password.length > 100) {
+            return res.json({
+                success: true,
+                mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
+            });
+        }
+
+        if (!passwordRegex.test(req.body.password)) {
+            return res.json({
+                success: true,
+                mensaje: 'Password is incorrect. Please try again'
+            });
+        }
+
+        if (typeof (bodyUser.phone_number) !== "number") {
+            return res.json({
+                success: true,
+                mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
+            });
+        }
+
+        if (bodyUser.phone_number.length > 20) {
+            return res.json({
+                success: true,
+                mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
+            });
+        }
+
+        const encrytedPassword = await bcrypt.hash(bodyUser.password, 10)
+
+        const updateOneUser = await User.update({
+            id
+        }, {
+            full_name: bodyUser.full_name,
+            password: encrytedPassword,
+            phone_number: bodyUser.phone_number
+        })
+
+        return res.json({
+            success: true,
+            message: "User updated successfully.",
+            data: {
+                full_name: bodyUser.full_name,
+                phone_number: bodyUser.phone_number
+            }
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "User can't be registered, please try again.",
+            error
+        })
+    }
 }
 
-const getAllUsers = (req: Request, res: Response) => {
+const getAllUsers = async (req: Request, res: Response) => {
 
 }
 

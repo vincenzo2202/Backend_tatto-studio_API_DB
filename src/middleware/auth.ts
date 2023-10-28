@@ -22,7 +22,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
       )
     }
 
-    const tokenDecoded = jwt.verify(token, "tattoStore") as TokenDecoded
+    const tokenDecoded = jwt.verify(token, "secreto") as TokenDecoded
 
     req.token = tokenDecoded
     

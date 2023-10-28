@@ -7,7 +7,7 @@ const userRoutes = Router();
 userRoutes.post('/register', register)
 userRoutes.post('/login', login)
 userRoutes.get('/profile',auth, profile)
-userRoutes.put('/update', updateUser)
+userRoutes.put('/update',auth, updateUser)
 userRoutes.get('/all', getAllUsers)
 
 export {userRoutes}

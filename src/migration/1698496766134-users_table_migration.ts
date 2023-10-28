@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class RoleUserTableMigration1698262405828 implements MigrationInterface {
-
+export class UsersTableMigration1698496766134 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "role_user",
+                name: "users",
                 columns: [
                     {
                         name: "id",
@@ -15,14 +14,39 @@ export class RoleUserTableMigration1698262405828 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "role_id",
-                        type: "int",
+                        name: "full_name",
+                        type: "varchar",
+                        length: "50",
                         isNullable: false
                     },
                     {
-                        name: "user_id",
-                        type: "int",
+                        name: "email",
+                        type: "varchar",
+                        length: "100",
+                        isUnique: true,
                         isNullable: false
+                    },
+                    {
+                        name: "password",
+                        type: "varchar",
+                        length: "100",
+                        isNullable: false
+                    },
+                    {
+                        name: "phone_number",
+                        type: "int",
+                        length: "20",
+                        isNullable: false
+                    },
+                    {
+                        name: "is_active",
+                        type: "boolean",
+                        default: true
+                    },
+                    {
+                        name: "role_id",
+                        type: "int",
+                        default: 1
                     },
                     {
                         name: "created_at",
@@ -36,13 +60,7 @@ export class RoleUserTableMigration1698262405828 implements MigrationInterface {
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
                 ],
-                foreignKeys: [
-                    {
-                        columnNames: ["user_id"],
-                        referencedTableName: "users",
-                        referencedColumnNames: ["id"],
-                        onDelete: "CASCADE",
-                    },
+                foreignKeys: [  
                     {
                         columnNames: ["role_id"],
                         referencedTableName: "roles",
@@ -50,13 +68,16 @@ export class RoleUserTableMigration1698262405828 implements MigrationInterface {
                         onDelete: "CASCADE",
                     }
                 ]
+    
             }),
             true
+           
         );
     }
-
+    
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("role_user")
+        await queryRunner.dropTable("users")
     }
-
-}
+    
+    }
+    

@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { Role } from "./Role" 
 
 @Entity("users")
@@ -23,24 +23,18 @@ export class User extends BaseEntity {
     is_active!: boolean
 
     @Column()
+    role_id!: number
+
+    @Column()
     created_at!: Date
 
     @Column()
     updated_at!: Date 
 
-    @ManyToMany(() => Role)
-    @JoinTable({
-        name: "role_user",
-        joinColumn: {
-            name: "user_id",
-            referencedColumnName: "id",
-        },
-        inverseJoinColumn: {
-            name: "role_id",
-            referencedColumnName: "id",
-        },
-    })
-    userRoles!: Role[];
+    @ManyToOne(() => Role, (role) => role.users)
+    @JoinColumn ({name: "role_id"})
+    role!: Role[];
+ 
 
     @ManyToMany(() => User)
     @JoinTable({
