@@ -1,12 +1,12 @@
 import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"; 
+import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
 
     try {
-        const createUserBody = req.body; 
+        const createUserBody = req.body;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
@@ -93,7 +93,7 @@ const register = async (req: Request, res: Response) => {
             email: createUserBody.email,
             password: encrytedPassword,
             phone_number: createUserBody.phone_number
-        }).save() 
+        }).save()
 
         return res.json({
             success: true,
@@ -140,7 +140,7 @@ const login = async (req: Request, res: Response) => {
         }
 
         const roles = loginByEmail.role.role_name;
-        
+
         const token = jwt.sign({
             id: loginByEmail.id,
             email: loginByEmail.email,
@@ -172,7 +172,7 @@ const profile = async (req: Request, res: Response) => {
             email
         })
 
-        return res.json ({
+        return res.json({
             success: true,
             message: "profile user retrieved",
             data: {
@@ -278,6 +278,46 @@ const updateUser = async (req: Request, res: Response) => {
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
+    try {
+
+        const users = req.body
+        const profileUser = await User.find();
+
+        if (users.length == 0) {
+            return res.json({
+                success: false,
+                message: "there are not any registered users",
+
+            })
+        }
+
+        const mappingUsers = profileUser.map(users => {
+            return {
+                id: users.id,
+                email: users.email,
+                name: users.full_name,
+                phone_number: users.phone_number,
+                is_active: users.is_active,
+                role_id:users.is_active,
+                created_at:users.is_active,
+                updated_at:users.is_active
+            };
+        });
+
+        return res.json({
+            success: true,
+            message: "profile user retrieved",
+            data: mappingUsers
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "user profile can't be retrieved",
+            error
+        })
+    }
+
 
 }
 
