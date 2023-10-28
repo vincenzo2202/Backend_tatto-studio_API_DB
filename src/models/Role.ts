@@ -7,7 +7,7 @@ export class Role extends BaseEntity {
 id!: number
 
 @Column()
-role!: string
+role_name!: string
 
 @Column()
 privilege!: string

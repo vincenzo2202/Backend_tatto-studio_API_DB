@@ -17,6 +17,12 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
+        if (createUserBody.full_name.length < 1) {
+            return res.json({
+                success: true,
+                mensaje: 'name too long, try to insert a shorter name, max 50 characters'
+            });
+        }
         if (createUserBody.full_name.length > 50) {
             return res.json({
                 success: true,
@@ -133,8 +139,8 @@ const login = async (req: Request, res: Response) => {
             })
         }
 
-        const roles = loginByEmail.role.map(role => role.role);
-
+        const roles = loginByEmail.role.role_name;
+        
         const token = jwt.sign({
             id: loginByEmail.id,
             email: loginByEmail.email,

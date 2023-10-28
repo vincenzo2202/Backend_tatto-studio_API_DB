@@ -14,7 +14,7 @@ export class RolesTableMigration1698496675919 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "role",
+                        name: "role_name",
                         type: "enum",
                         enum: ["user", "admin", "super_admin"],
                         default: `"user"`
