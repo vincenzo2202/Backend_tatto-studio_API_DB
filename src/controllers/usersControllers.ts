@@ -328,4 +328,46 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 }
 
-export { register, login, profile, updateUser, getAllUsers } 
+const getAllWorkers = async (req: Request, res: Response) => {
+    try {
+
+        const users = req.body
+        const profileUser = await User.findBy({
+            role_id: 2
+        });
+
+        if (users.length == 0) {
+            return res.json({
+                success: false,
+                message: "there are not any registered users",
+
+            })
+        }
+
+        const mappingUsers = profileUser.map(users => {
+            return { 
+                email: users.email,
+                name: users.full_name,
+                phone_number: users.phone_number, 
+                role_id:users.is_active
+            };
+        });
+
+        return res.json({
+            success: true,
+            message: "profile user retrieved",
+            data: mappingUsers
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "user profile can't be retrieved",
+            error
+        })
+    }
+
+
+}
+
+export { register, login, profile, updateUser, getAllUsers, getAllWorkers} 

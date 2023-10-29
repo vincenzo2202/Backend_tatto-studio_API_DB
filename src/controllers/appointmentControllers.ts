@@ -440,7 +440,7 @@ const getAllArtist = async (req: Request, res: Response) => {
 
         return res.json({
             success: true,
-            message: "Here are all your appointments",
+            message: "Here are all your appointments as employee",
             data: appointmentsUserForShows
         });
 
