@@ -21,11 +21,11 @@ export class Appointment extends BaseEntity {
     @Column()
     client_id!: number
 
-    @Column()
-    created_at!: Date
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    created_at!: Date;
 
-    @Column()
-    updated_at!: Date
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    updated_at!: Date;
 
 
     @ManyToMany(() => Portfolio)
