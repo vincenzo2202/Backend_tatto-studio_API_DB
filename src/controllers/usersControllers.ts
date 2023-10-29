@@ -348,8 +348,7 @@ const getAllWorkers = async (req: Request, res: Response) => {
             return { 
                 email: users.email,
                 name: users.full_name,
-                phone_number: users.phone_number, 
-                role_id:users.is_active
+                phone_number: users.phone_number 
             };
         });
 
