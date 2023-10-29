@@ -29,7 +29,16 @@ const createAppointment = async (req: Request, res: Response) => {
             })
         }
 
-      
+        // validar las fechas
+        // https://www.npmjs.com/package/dayjs
+
+
+        // if(createNewAppointment.date ==   && createNewAppointment.time == ){
+        //     return res.json({
+        //         success: true,
+        //         message: "sorry, you can't create a appointment with yourself"
+        //     })
+        // }
             
         const createNewAppointment = await Appointment.create({
             date: appointmentBody.date,
@@ -67,6 +76,45 @@ const updateAppointment = (req:Request, res: Response)=>{
 }
 const deleteAppointment = async(req:Request, res: Response)=>{
 
+    try {
+        const bodyId = req.body.id
+        const clientId = req.token.id
+
+        if(!bodyId){
+            return res.json({
+                success: true,
+                message: "Introduce an Id to delete a appointment",
+            })
+        }
+ 
+        const getUser = await Appointment.findBy({
+            client_id: clientId
+        }) 
+
+        const appointments_id = getUser.map((appointment)=>
+        appointment.id
+        ) 
+
+        if(!appointments_id.includes(bodyId)){
+            return res.json("Is not possible delete this appointment")
+        }
+
+        const deleteAppointmentById = await Appointment.delete({
+            id: bodyId
+        })
+
+        return res.json({
+            success: true,
+            message: "Appointment was deleted succesfully",
+        })
+        
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "This appointment can't be deleted, try again",
+            error
+        })
+    }
 }
  
 
