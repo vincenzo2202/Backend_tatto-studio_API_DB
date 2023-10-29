@@ -254,6 +254,7 @@ const updateAppointment = async (req: Request, res: Response) => {
         )
     }
 }
+
 const deleteAppointment = async (req: Request, res: Response) => {
 
     try {
@@ -276,7 +277,7 @@ const deleteAppointment = async (req: Request, res: Response) => {
         )
 
         if (!appointments_id.includes(deleteById)) {
-            return res.json("no se puede borrar")
+            return res.json("It cannot be deleted")
         }
 
         const deleteAppointmentById = await Appointment.delete({
@@ -285,13 +286,13 @@ const deleteAppointment = async (req: Request, res: Response) => {
 
         return res.json({
             success: true,
-            message: "appointment deleted succesfully",
+            message: "The appointment was successfully deleted.",
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "appointment can't be deleted, try again",
+            message: "Unable to delete the appointment, please try again.",
             error
         })
     }
