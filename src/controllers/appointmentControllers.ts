@@ -453,4 +453,50 @@ const getAllArtist = async (req: Request, res: Response) => {
     }
 }
 
-export { createAppointment, updateAppointment, deleteAppointment,getAllMyAppointment ,getAllArtist}
+// obtener todas las citas como super admin 
+const getallAppointmentDetail = async (req: Request, res: Response) => {
+    
+   
+    try {
+        const id = req.token.id
+
+        const appointmentsUser = await Appointment.find()
+
+        const appointmentsUserForShows = await Promise.all(appointmentsUser.map(async (obj) => {
+            const { status, worker_id, client_id, ...rest } = obj;
+            
+            const user = await User.findOneBy({ 
+                id: client_id
+            });
+
+            if (user) {
+                const email = user.email;
+                const is_active = user.is_active;
+                const full_name = user.full_name;
+                return { email, is_active,full_name,...rest,  };
+            }
+            else {
+                return null
+            }
+        }));
+
+        return res.json({
+            success: true,
+            message: "Here are all your appointments",
+            data: appointmentsUserForShows
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "appointments can't be getted, try again",
+            error
+        })
+    }
+}
+//obtener la cita a detalle
+const getAppointmentDetail = async (req: Request, res: Response) => {
+   
+}
+
+export { createAppointment, updateAppointment, deleteAppointment,getAllMyAppointment ,getAllArtist, getallAppointmentDetail}
