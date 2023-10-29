@@ -13,6 +13,13 @@ const createAppointment = async (req: Request, res: Response) => {
 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
+        if (!email) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
+        }
+
         if (typeof (email) !== "string") {
             return res.json({
                 success: true,
@@ -39,6 +46,14 @@ const createAppointment = async (req: Request, res: Response) => {
             relations: ["role"]
         });
 
+        
+        if(findWorkerByEmail?.is_active !== true){
+            return res.json({
+                success: true,
+                message: "worker doesn't exist" 
+            })
+        }
+
         if (findWorkerByEmail?.role.role_name != "admin") {
             return res.json({
                 success: true,
@@ -50,6 +65,13 @@ const createAppointment = async (req: Request, res: Response) => {
             return res.json({
                 success: true,
                 message: "I'm sorry, you can't create an appointment with yourself."
+            })
+        }
+
+        if (!date) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
             })
         }
 
@@ -69,6 +91,13 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
+        if (!time) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
+        }
+
         if (typeof (time) !== "string") {
             return res.json({
                 success: true,
@@ -85,7 +114,7 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        const createNewAppointment = await Appointment.create({
+        const createAppointment = await Appointment.create({
             date,
             time,
             worker_id: findWorkerByEmail.id,
@@ -96,12 +125,12 @@ const createAppointment = async (req: Request, res: Response) => {
             success: true,
             message: "Appointment created successfully",
             data: {
-                date: createNewAppointment.date,
-                time: createNewAppointment.time,
+                date: createAppointment.date,
+                time: createAppointment.time,
                 email: email,
-                id: createNewAppointment.id,
-                created_at: createNewAppointment.created_at,
-                updated_at: createNewAppointment.updated_at
+                id: createAppointment.id,
+                created_at: createAppointment.created_at,
+                updated_at: createAppointment.updated_at
             }
         })
 
@@ -130,6 +159,13 @@ const updateAppointment = async (req: Request, res: Response) => {
 
         //validacion del correo que sea string
 
+        if (!email) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
+        }
+
         if (typeof (email) !== "string") {
             return res.json({
                 success: true,
@@ -156,7 +192,21 @@ const updateAppointment = async (req: Request, res: Response) => {
             email
         })
 
+        if(findWorkerByEmail?.is_active !== true){
+            return res.json({
+                success: true,
+                message: "worker doesn't exist" 
+            })
+        } 
+
         const WorkerID = findWorkerByEmail?.id
+
+        if (!appointmentId) {
+            return res.json({
+                success: true,
+                message: "You must enter an ID.",
+            })
+        }
 
         //validacion de que el id de la cita tenga formato number
         if (typeof (appointmentId) !== "number") {
@@ -164,6 +214,13 @@ const updateAppointment = async (req: Request, res: Response) => {
                 success: true,
                 mensaje: "ID incorrect, you can only use numbers, please try again."
             });
+        }
+
+        if (!date) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
         }
 
         //validacion de la fecha
@@ -180,6 +237,13 @@ const updateAppointment = async (req: Request, res: Response) => {
                 success: true,
                 mensaje: "Date incorrect, The date format should be YYYY-MM-DD, please try again."
             });
+        }
+
+        if (!time) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
         }
 
         //validacion de la hora
@@ -268,6 +332,13 @@ const deleteAppointment = async (req: Request, res: Response) => {
             })
         }
 
+        if (typeof (deleteById) !== "number") {
+            return res.json({
+                success: true,
+                mensaje: "id incorrect, you can put only numbers, try again"
+            });
+        }
+
         const getUser = await Appointment.findBy({
             client_id: clientId
         })
@@ -299,4 +370,87 @@ const deleteAppointment = async (req: Request, res: Response) => {
 }
 
 
-export { createAppointment, updateAppointment, deleteAppointment }
+const getAllMyAppointment = async (req: Request, res: Response) => {
+
+    try {
+        const id = req.token.id
+
+        const appointmentsUser = await Appointment.findBy({
+            client_id: id
+        })
+
+        const appointmentsUserForShows = await Promise.all(appointmentsUser.map(async (obj) => {
+            const { status, worker_id, client_id, ...rest } = obj;
+            
+            const worker = await User.findOneBy({ 
+                id: worker_id 
+            });
+
+            if (worker) {
+                const email = worker.email;
+                const is_active = worker.is_active;
+                return { ...rest, email, is_active };
+            }
+            else {
+                return null
+            }
+        }));
+
+        return res.json({
+            success: true,
+            message: "Here are all your appointments",
+            data: appointmentsUserForShows
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "appointments can't be getted, try again",
+            error
+        })
+    }
+}
+
+
+const getAllArtist = async (req: Request, res: Response) => {
+
+    try {
+        const id = req.token.id
+
+        const appointmentsWorker = await Appointment.findBy({
+            worker_id: id
+        })
+
+        const appointmentsUserForShows = await Promise.all(appointmentsWorker.map(async (obj) => {
+            const { status, worker_id, client_id, ...rest } = obj;
+            
+            const worker = await User.findOneBy({ 
+                id: worker_id 
+            });
+
+            if (worker) {
+                const email = worker.email;
+                const is_active = worker.is_active;
+                return { ...rest, email, is_active };
+            }
+            else {
+                return null
+            }
+        }));
+
+        return res.json({
+            success: true,
+            message: "Here are all your appointments",
+            data: appointmentsUserForShows
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "appointments can't be getted, try again",
+            error
+        })
+    }
+}
+
+export { createAppointment, updateAppointment, deleteAppointment,getAllMyAppointment ,getAllArtist}

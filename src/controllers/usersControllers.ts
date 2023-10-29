@@ -125,6 +125,13 @@ const login = async (req: Request, res: Response) => {
             relations: ["role"]
         });
 
+        if(loginByEmail?.is_active !== true){
+            return res.json({
+                success: true,
+                message: "user doesn't exist" 
+            })
+        }
+
         if (!loginByEmail) {
             return res.json({
                 success: true,
@@ -198,6 +205,7 @@ const updateUser = async (req: Request, res: Response) => {
         const id = req.token.id
 
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
+
 
         if (typeof (bodyUser.full_name) !== "string") {
             return res.json({
