@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorkers, deleteUsersByAdmin} from "../controllers/usersControllers";
+import { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin } from "../controllers/usersControllers";
 import { auth } from "../middleware/auth";
-import { isSuperAdmin } from "../middleware/isSuperAdmin"; 
+import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
 const userRoutes = Router();
 
 userRoutes.post('/register', register)
 userRoutes.post('/login', login)
-userRoutes.get('/profile',auth, profile)
-userRoutes.put('/update',auth, updateUser)
-userRoutes.get('/all',auth,isSuperAdmin, getAllUsers)
-userRoutes.get('/allWorkers',auth, getAllWorkers)
-userRoutes.post('/createWorkers',auth,isSuperAdmin, createWorkers)
-userRoutes.delete('/deleteUser',auth,isSuperAdmin, deleteUsersByAdmin)
+userRoutes.get('/profile', auth, profile)
+userRoutes.put('/update', auth, updateUser)
+userRoutes.get('/all', auth, isSuperAdmin, getAllUsers)
+userRoutes.get('/allWorkers', auth, getAllWorkers)
+userRoutes.post('/createWorker', auth, isSuperAdmin, createWorker)
+userRoutes.delete('/deleteUser', auth, isSuperAdmin, deleteUserBySuperAdmin)
 
-export {userRoutes}
+export { userRoutes }

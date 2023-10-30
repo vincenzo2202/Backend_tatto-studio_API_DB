@@ -455,13 +455,13 @@ const getAllArtist = async (req: Request, res: Response) => {
 
 // obtener todas las citas como super admin 
 const getallAppointmentDetail = async (req: Request, res: Response) => {
-    
-   
+  
+
     try {
         const id = req.token.id
 
         const appointmentsUser = await Appointment.find()
-
+ 
         const appointmentsUserForShows = await Promise.all(appointmentsUser.map(async (obj) => {
             const { status, worker_id, client_id, ...rest } = obj;
             
@@ -471,9 +471,9 @@ const getallAppointmentDetail = async (req: Request, res: Response) => {
 
             if (user) {
                 const email = user.email;
-                const is_active = user.is_active;
                 const full_name = user.full_name;
-                return { email, is_active,full_name,...rest,  };
+                const is_active = user.is_active;
+                return { is_active, email,full_name,...rest,  };
             }
             else {
                 return null
@@ -494,6 +494,7 @@ const getallAppointmentDetail = async (req: Request, res: Response) => {
         })
     }
 }
+
 //obtener la cita a detalle
 const getAppointmentDetail = async (req: Request, res: Response) => {
    

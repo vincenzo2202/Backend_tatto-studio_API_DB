@@ -1,4 +1,5 @@
 import express from "express"; 
+import 'dotenv/config'
 import { AppDataSource } from "./db";
 import { userRoutes } from "./routes/usersRoutes";
 import { appointmentRoutes } from "./routes/appointmentRoutes";

@@ -148,11 +148,14 @@ const login = async (req: Request, res: Response) => {
 
         const roles = loginByEmail.role.role_name;
 
+        const secret = process.env.JWT_SECRET as string
+ 
+
         const token = jwt.sign({
             id: loginByEmail.id,
             email: loginByEmail.email,
             role: roles
-        }, "secreto", {
+        },secret, {
             expiresIn: "3h"
         })
 
@@ -285,12 +288,31 @@ const updateUser = async (req: Request, res: Response) => {
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
-    try {
+    try { 
 
-        const users = req.body
-        const profileUser = await User.find();
+        if(typeof(req.query.skip) !== "string"){
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
 
-        if (users.length == 0) {
+        if(typeof(req.query.page) !== "string"){
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page:any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+        const profileUser = await User.find({
+            skip:skip,
+            take:pageSize
+        })
+        if (profileUser.length == 0) {
             return res.json({
                 success: false,
                 message: "there are not any registered users",
@@ -329,39 +351,61 @@ const getAllUsers = async (req: Request, res: Response) => {
 }
 
 const getAllWorkers = async (req: Request, res: Response) => {
-    try {
+    try { 
 
-        const users = req.body
-        const profileUser = await User.findBy({
-            role_id: 2
-        });
-
-        if (users.length == 0) {
+        if(typeof(req.query.skip) !== "string"){
             return res.json({
-                success: false,
-                message: "there are not any registered users",
-
+                success: true,
+                message: "skip it's not string."
             })
         }
 
+        if(typeof(req.query.page) !== "string"){
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page:any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+        const profileUser = await User.find({
+            where: {
+                role_id: 2
+            },
+            skip: skip,
+            take: pageSize
+        });
+
+        if (profileUser.length == 0) {
+            return res.json({
+                success: false,
+                message: "there are not any registered worker" 
+            })
+        }
+
+       
         const mappingUsers = profileUser.map(users => {
+            if(users.is_active == true){
             return { 
                 email: users.email,
                 name: users.full_name,
                 phone_number: users.phone_number 
-            };
+            };}
         });
 
         return res.json({
             success: true,
-            message: "profile user retrieved",
+            message: "here you have all workers",
             data: mappingUsers
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "user profile can't be retrieved",
+            message: "workers can't be retrieved",
             error
         })
     }
@@ -369,8 +413,7 @@ const getAllWorkers = async (req: Request, res: Response) => {
 
 }
 
-
-const createWorkers = async (req: Request, res: Response) => {
+const createWorker = async (req: Request, res: Response) => {
     try {
         const createUserBody = req.body;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -459,13 +502,12 @@ const createWorkers = async (req: Request, res: Response) => {
             email: createUserBody.email,
             password: encrytedPassword,
             phone_number: createUserBody.phone_number,
-            role_id: createUserBody.role_id
-
+            role_id: 2
         }).save()
 
         return res.json({
             success: true,
-            message: "user registered succesfully",
+            message: "worker registered succesfully",
             data: {
                 full_name: newUser.full_name,
                 email: newUser.email,
@@ -476,14 +518,14 @@ const createWorkers = async (req: Request, res: Response) => {
     } catch (error) {
         return res.json({
             success: false,
-            message: "user can't be registered, try again",
+            message: "worker can't be registered, try again",
             error
         })
     } 
 
 }
 
-const deleteUsersByAdmin = async (req: Request, res: Response) => {
+const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
     
     try {
         const deleteById = req.body.id 
@@ -522,4 +564,4 @@ const deleteUsersByAdmin = async (req: Request, res: Response) => {
 }
 
 
-export { register, login, profile, updateUser, getAllUsers, getAllWorkers,createWorkers, deleteUsersByAdmin} 
+export { register, login, profile, updateUser, getAllUsers, getAllWorkers,createWorker,deleteUserBySuperAdmin} 
