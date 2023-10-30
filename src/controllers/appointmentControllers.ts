@@ -542,34 +542,46 @@ const getAllArtist = async (req: Request, res: Response) => {
 
 // obtener todas las citas como super admin 
 const getallAppointmentSuperAdmin = async (req: Request, res: Response) => { 
-    try {
-        const id = req.token.id
-
+    try {  
         const appointmentsUser = await Appointment.find()
 
-        const appointmentsUserForShows = await Promise.all(appointmentsUser
+        const appointmentsAll = await Promise.all(appointmentsUser
              .map(async (obj) => {
-            const { status, worker_id, client_id, ...rest } = obj;
+            const { worker_id, client_id, ...rest } = obj;
 
+            
             const user = await User.findOneBy({
                 id: client_id
             });
 
-            if (user) {
-                const email = user.email;
-                const full_name = user.full_name;
+            const worker = await User.findOneBy({
+                id: worker_id
+            });
+
+            if (user && worker) {
+                const  user_email = user.email;
+                const user_name = user.full_name; 
                 const is_active = user.is_active;
-                return { is_active, email, full_name, ...rest, };
+                const  worker_email = worker.email;
+                const worker_name = worker.full_name;  
+                return { is_active, user_email, user_name,worker_email,worker_name, ...rest, };
             }
             else {
                 return null
             }
         }));
 
+        if (appointmentsAll.length == 0) {
+            return res.json({
+                success: true,
+                message: "This shop currently has no available appointments.",
+            });
+        }
+
         return res.json({
             success: true,
             message: "Here are all your appointments",
-            data: appointmentsUserForShows
+            data: appointmentsAll
         });
 
     } catch (error) {
