@@ -17,6 +17,7 @@ export class PortfolioTableMigration1698496868123 implements MigrationInterface 
                     {
                         name: "name",
                         type: "varchar",
+                        length: "100",
                         isNullable: false,
                         isUnique: true
                     },
@@ -29,11 +30,13 @@ export class PortfolioTableMigration1698496868123 implements MigrationInterface 
                     {
                         name: "image",
                         type: "varchar",
+                        length: "255",
                         isNullable: false
                     },
                     {
                         name: "price",
                         type: "float",
+                        length: "15",
                         isNullable: false
                     },
                     {
