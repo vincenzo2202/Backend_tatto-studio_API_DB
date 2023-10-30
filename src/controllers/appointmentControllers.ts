@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment"
 import { User } from "../models/User";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 import { Portfolio } from "../models/Portfolio";
-
+ 
 
 const getAllMyAppointment = async (req: Request, res: Response) => {
 
@@ -47,12 +47,12 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
         })
     }
 }
-
+//check
 const createAppointment = async (req: Request, res: Response) => {
 
     try {
         const date = req.body.date
-        const time = req.body.time
+        const shift = req.body.shift
         const email = req.body.email
         const purchase = req.body.name
         const idToken = req.token.id
@@ -103,35 +103,35 @@ const createAppointment = async (req: Request, res: Response) => {
         if (findWorkerByEmail?.is_active !== true) {
             return res.json({
                 success: true,
-                message: "worker doesn't exist"
+                message: "this worker not exist"
             })
         }
 
         if (findWorkerByEmail?.role.role_name != "admin") {
             return res.json({
                 success: true,
-                message: "I'm sorry, the email you entered does not belong to any employee. Please enter a correct one"
+                message: "sorry, this user isn't a worker, try again"
             })
         }
 
         if (idToken == findWorkerByEmail.id) {
             return res.json({
                 success: true,
-                message: "I'm sorry, you can't create an appointment with yourself."
+                message: "sorry, you can't create a appointment with yourself"
             })
         }
 
         if (!date) {
             return res.json({
                 success: true,
-                message: "you must insert an email",
+                message: "you must insert a date",
             })
         }
 
         if (typeof (date) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date format, it can only contain strings"
+                mensaje: "date incorrect, you can put only strings, try again"
             });
         }
 
@@ -140,36 +140,74 @@ const createAppointment = async (req: Request, res: Response) => {
         if (!dateRegex.test(date)) {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date, the format should be YYYY-MM-DD."
+                mensaje: "date incorrect, The date format should be YYYY-MM-DD, try again"
             });
         }
 
-        if (!time) {
+        if (!shift) {
             return res.json({
                 success: true,
-                message: "you must insert an email",
+                message: "you must insert a shift",
             })
         }
 
-        if (typeof (time) !== "string") {
+        if (typeof (shift) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Incorrect time format, it can only contain stringsn"
+                mensaje: "shift incorrect, you can put only strings, try again"
             });
         }
 
-        const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
-
-        if (!timeRegex.test(time)) {
+        if (shift !== "morning" && shift !== "afternoon") {
             return res.json({
                 success: true,
-                mensaje: "Incorrect Time, the format should be HH:MM:SS."
+                mensaje: "shift incorrect, you only can put morning or afternoon, try again"
+            });
+        }
+       
+        if (!purchase) {
+            return res.json({
+                success: true,
+                message: "you must insert an name",
+            })
+        }
+
+        if (typeof (purchase) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'name incorrect, you can put only strings, try again'
             });
         }
 
+        if (purchase.length == 0) {
+            return res.json({
+                success: true,
+                mensaje: 'name too short, try to insert a larger name, max 100 characters'
+            });
+        }
+
+        if (purchase.length > 100) {
+            return res.json({
+                success: true,
+                mensaje: 'name too long, try to insert a shorter name, max 100 characters'
+            });
+        }
+
+        const getPurchaseItems = await Portfolio.find()
+
+        const mapPortfolio = getPurchaseItems.map((obj)=>obj.name)
+
+        if(!mapPortfolio.includes(purchase)){
+            return res.json({
+                success: true,
+                message: "the name of the item purchase doesn't exist",
+            })
+        }
+
+ 
         const createAppointment = await Appointment.create({
             date,
-            time,
+            shift,
             worker_id: findWorkerByEmail.id,
             client_id: idToken
         }).save()
@@ -189,7 +227,7 @@ const createAppointment = async (req: Request, res: Response) => {
             message: "Appointment created successfully",
             data: {
                 date: createAppointment.date,
-                time: createAppointment.time,
+                shift: createAppointment.shift,
                 email: email,
                 id: createAppointment.id,
                 purchase: portfolio?.name,
@@ -214,13 +252,13 @@ const updateAppointment = async (req: Request, res: Response) => {
         const body = req.body
         const appointmentId = body.id
         const date = body.date
-        const time = body.time
+        const shift = body.shift
         const email = body.email
 
         //regex de correo, fecha y hora
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+        const shiftRegex = /^\d{2}:\d{2}:\d{2}$/;
 
         //validacion del correo que sea string
 
@@ -304,7 +342,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        if (!time) {
+        if (!shift) {
             return res.json({
                 success: true,
                 message: "you must insert an email",
@@ -312,18 +350,18 @@ const updateAppointment = async (req: Request, res: Response) => {
         }
 
         //validacion de la hora
-        if (typeof (time) !== "string") {
+        if (typeof (shift) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Time incorrect, you can only use strings"
+                mensaje: "shift incorrect, you can only use strings"
             });
         }
 
         //validacion de la hora formato regex
-        if (!timeRegex.test(time)) {
+        if (!shiftRegex.test(shift)) {
             return res.json({
                 success: true,
-                mensaje: "Time incorrect, The time format should be HH:MM:SS, please try again."
+                mensaje: "shift incorrect, The shift format should be HH:MM:SS, please try again."
             });
         }
 
@@ -351,7 +389,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             },
             {
                 date: date,
-                time: time,
+                shift: shift,
                 worker_id: WorkerID
             }
         )
@@ -365,7 +403,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             message: "The appointment was successfully created.",
             data: {
                 date,
-                time,
+                shift,
                 email,
                 id: appointmentId,
                 created_at: dataAppointmentUpdated?.created_at,
@@ -383,7 +421,7 @@ const updateAppointment = async (req: Request, res: Response) => {
         )
     }
 }
-
+//check
 const deleteAppointment = async (req: Request, res: Response) => {
 
     try {

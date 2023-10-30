@@ -9,8 +9,8 @@ export class Appointment extends BaseEntity {
     @Column({ type: "date" })
     date!: string; 
 
-    @Column({ type: "time" })
-    time!: string;
+    @Column()
+    shift!: string;
 
     @Column()
     status!: boolean
