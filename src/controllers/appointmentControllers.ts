@@ -494,9 +494,32 @@ const getAllArtist = async (req: Request, res: Response) => {
     try {
         const id = req.token.id
 
-        const appointmentsWorker = await Appointment.findBy({
-            worker_id: id
+        if(typeof(req.query.skip) !== "string"){
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
+
+        if(typeof(req.query.page) !== "string"){
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page:any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+       
+        const appointmentsWorker = await Appointment.find({
+            where:{worker_id: id},
+            skip:skip,
+            take:pageSize
         })
+
+         
 
         const appointmentsWorkers = await Promise.all(appointmentsWorker
 
@@ -543,7 +566,30 @@ const getAllArtist = async (req: Request, res: Response) => {
 // obtener todas las citas como super admin 
 const getallAppointmentSuperAdmin = async (req: Request, res: Response) => { 
     try {  
-        const appointmentsUser = await Appointment.find()
+
+        if(typeof(req.query.skip) !== "string"){
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
+
+        if(typeof(req.query.page) !== "string"){
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page:any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+       
+        const appointmentsUser = await Appointment.find({
+            skip:skip,
+            take:pageSize
+        })
 
         const appointmentsAll = await Promise.all(appointmentsUser
              .map(async (obj) => {
