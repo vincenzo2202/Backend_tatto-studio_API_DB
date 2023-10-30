@@ -47,7 +47,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
         })
     }
 }
-//check
+ 
 const createAppointment = async (req: Request, res: Response) => {
 
     try {
