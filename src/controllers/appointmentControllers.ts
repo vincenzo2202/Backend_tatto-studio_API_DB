@@ -55,9 +55,12 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
 
 const createAppointment = async (req: Request, res: Response) => {
 
-    try {
-
-        const { date, shift, email, purchase, idToken } = req.body
+    try {  
+        const date = req.body.date
+        const shift = req.body.shift
+        const email = req.body.email
+        const   purchase = req.body.name
+        const idToken = req.token.id
 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -232,6 +235,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 id: createNewAppointment.id,
                 purchase: portfolio?.name,
                 price: portfolio?.price,
+                category:portfolio?.category,
                 created_at: createNewAppointment.created_at,
                 updated_at: createNewAppointment.updated_at
             }
@@ -404,7 +408,12 @@ const updateAppointment = async (req: Request, res: Response) => {
                 success: true,
                 message: "the name of the item purchase doesn't exist",
             })
-        }
+        } 
+
+        const namePortfolio = await Portfolio.findOneBy({
+            name
+        })
+
         await Appointment.update({
             id: id
         }, {
@@ -413,8 +422,18 @@ const updateAppointment = async (req: Request, res: Response) => {
             worker_id
         })
 
+        await Appointment_portfolio.update({
+             appointment_id: id
+        }, { 
+            portfolio_id:namePortfolio?.id  
+        }) 
+
         const appointmentUpdated = await Appointment.findOneBy({
             id: id
+        })
+
+        const portfolio= await Portfolio.findOneBy({
+            name
         })
 
         return res.json({
@@ -425,6 +444,8 @@ const updateAppointment = async (req: Request, res: Response) => {
                 shift,
                 email,
                 id: id,
+                name,
+                category: portfolio?.category,
                 created_at: appointmentUpdated?.created_at,
                 updated_at: appointmentUpdated?.updated_at
             }
