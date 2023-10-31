@@ -379,6 +379,8 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
+        
+
         const appointmentsClient = await Appointment.findBy({
             client_id,
         })
@@ -558,17 +560,20 @@ const getAllArtist = async (req: Request, res: Response) => {
 
         const appointmentsWorker = await Appointment.find({
             where: { worker_id: id },
+            relations: ["appointmentPortfolios"],
             skip: skip,
             take: pageSize
         })
-
-
 
         const appointmentsWorkers = await Promise.all(appointmentsWorker
 
             .filter((obj) => obj.status === false)
             .map(async (obj) => {
-                const { worker_id, client_id, ...rest } = obj;
+                const { worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+
+                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+
                 const user = await User.findOneBy({
                     id: client_id
                 });
@@ -577,7 +582,9 @@ const getAllArtist = async (req: Request, res: Response) => {
                     const user_email = user.email;
                     const user_name = user.full_name
                     const is_active = user.is_active;
-                    return { user_email, user_name, is_active, ...rest };
+                    const name = purchase[0]
+                    const category = categoryPortfolio[0]
+                    return { user_email, user_name, is_active ,name,category,...rest };
                 }
                 else {
                     return null
@@ -629,13 +636,17 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
 
 
         const appointmentsUser = await Appointment.find({
+            
+            relations: ["appointmentPortfolios"],
             skip: skip,
             take: pageSize
         })
 
         const appointmentsAll = await Promise.all(appointmentsUser
             .map(async (obj) => {
-                const { worker_id, client_id, ...rest } = obj;
+                const { worker_id, client_id,appointmentPortfolios, ...rest } = obj;
+                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
 
 
                 const user = await User.findOneBy({
@@ -652,7 +663,9 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
                     const is_active = user.is_active;
                     const worker_email = worker.email;
                     const worker_name = worker.full_name;
-                    return { is_active, user_email, user_name, worker_email, worker_name, ...rest, };
+                    const name = purchase[0]
+                    const category = categoryPortfolio[0]
+                    return { is_active, user_email, user_name, worker_email, worker_name,name,category ,...rest, };
                 }
                 else {
                     return null
