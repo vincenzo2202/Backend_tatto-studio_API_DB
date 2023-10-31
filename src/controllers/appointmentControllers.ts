@@ -746,10 +746,19 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
             })
         }
 
+        const appointmentDetail = appointmentsUser.find(obj => obj?.id === appointment_id);
+
+        if (appointmentDetail == null) {
+            return res.json({
+                success: true,
+                message: "appointment id incorrect, try again",
+            });
+        }
+
         return res.json({
             success: true,
             message: "Here is a list of all your appointments.",
-            data: appointmentsUser
+            data: appointmentDetail
         });
 
     } catch (error) {
@@ -761,7 +770,71 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
     }
 }
 
+const appointmentValidation = async (req: Request, res: Response) => {
+    try { 
+        const idToken = req.token.id
+        const appointment_id = req.body.id
+        const date = req.body.date
+        const shift = req.body.shift
+
+        const getAllMyAppointment = await Appointment.find({
+            where: { id: appointment_id },
+            relations: ["appointmentPortfolios"]
+        })
+
+        const appointmentsUser = await Promise.all(
+            getAllMyAppointment.map(async (obj) => {
+                const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+
+                const getWorker = await User.findOneBy({
+                    id: worker_id
+                });
+
+                const getUser = await User.findOneBy({
+                    id: client_id
+                });
+
+                if (getWorker && getUser) {
+                    const worker_name = getWorker.full_name
+                    const worker_email = getWorker.email;
+                    const is_active = getWorker.is_active;
+                    const name = purchase[0]
+                    const client_id = getUser.full_name
+                    const client_email = getUser.email
+                    return { worker_name, worker_email, name, is_active, client_id, client_email, ...rest };
+                }
+                else {
+                    return null
+                }
+            })
+        );
+
+        const appointmentDetail = appointmentsUser.find(obj => obj?.date === date && obj?.shift === shift);
+
+        if (appointmentDetail?.date  == date && appointmentDetail?.shift == shift) { 
+            return res.json({
+                success: true,
+                message: "The appointment is not available, try a different date or shift" 
+            });
+        }
+ 
+        return res.json({
+            success: true,
+            message: "Appointment available" 
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "Appointments cannot be retrieved, please try again.",
+            error
+        })
+    }
+}
+
+  
 
 
 
-export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail }
+export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail,appointmentValidation }
