@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAppointment, deleteAppointment, getAllArtist, getAllMyAppointment, getallAppointmentSuperAdmin, updateAppointment } from "../controllers/appointmentControllers";
+import { createAppointment, deleteAppointment, getAllArtist, getAllMyAppointment, getAppointmentDetail, getallAppointmentSuperAdmin, updateAppointment } from "../controllers/appointmentControllers";
 import { auth } from "../middleware/auth";
 import { isAdmin } from "../middleware/isAdmin";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
@@ -12,6 +12,7 @@ appointmentRoutes.delete('/deleteAppointment',auth, deleteAppointment)
 appointmentRoutes.get('/getAllAppointment',auth, getAllMyAppointment)
 appointmentRoutes.get('/getAllArtist',auth, isAdmin, getAllArtist)
 appointmentRoutes.get('/AllAppointmentsSuper',auth, isSuperAdmin, getallAppointmentSuperAdmin)
+appointmentRoutes.get('/appointmentDetail',auth, getAppointmentDetail)
 
 
 

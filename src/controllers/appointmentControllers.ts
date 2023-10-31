@@ -488,20 +488,20 @@ const deleteAppointment = async (req: Request, res: Response) => {
         })
     }
 }
- 
+
 const getAllArtist = async (req: Request, res: Response) => {
 
     try {
         const id = req.token.id
 
-        if(typeof(req.query.skip) !== "string"){
+        if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
                 message: "skip it's not string."
             })
         }
 
-        if(typeof(req.query.page) !== "string"){
+        if (typeof (req.query.page) !== "string") {
             return res.json({
                 success: true,
                 message: "page it's not string."
@@ -509,17 +509,17 @@ const getAllArtist = async (req: Request, res: Response) => {
         }
 
         const pageSize = parseInt(req.query.skip as string) || 5
-        const page:any = parseInt(req.query.page as string) || 1
+        const page: any = parseInt(req.query.page as string) || 1
         const skip = (page - 1) * pageSize
 
-       
+
         const appointmentsWorker = await Appointment.find({
-            where:{worker_id: id},
-            skip:skip,
-            take:pageSize
+            where: { worker_id: id },
+            skip: skip,
+            take: pageSize
         })
 
-         
+
 
         const appointmentsWorkers = await Promise.all(appointmentsWorker
 
@@ -563,18 +563,17 @@ const getAllArtist = async (req: Request, res: Response) => {
     }
 }
 
-// obtener todas las citas como super admin 
-const getallAppointmentSuperAdmin = async (req: Request, res: Response) => { 
-    try {  
+const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
+    try {
 
-        if(typeof(req.query.skip) !== "string"){
+        if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
                 message: "skip it's not string."
             })
         }
 
-        if(typeof(req.query.page) !== "string"){
+        if (typeof (req.query.page) !== "string") {
             return res.json({
                 success: true,
                 message: "page it's not string."
@@ -582,40 +581,40 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
         }
 
         const pageSize = parseInt(req.query.skip as string) || 5
-        const page:any = parseInt(req.query.page as string) || 1
+        const page: any = parseInt(req.query.page as string) || 1
         const skip = (page - 1) * pageSize
 
-       
+
         const appointmentsUser = await Appointment.find({
-            skip:skip,
-            take:pageSize
+            skip: skip,
+            take: pageSize
         })
 
         const appointmentsAll = await Promise.all(appointmentsUser
-             .map(async (obj) => {
-            const { worker_id, client_id, ...rest } = obj;
+            .map(async (obj) => {
+                const { worker_id, client_id, ...rest } = obj;
 
-            
-            const user = await User.findOneBy({
-                id: client_id
-            });
 
-            const worker = await User.findOneBy({
-                id: worker_id
-            });
+                const user = await User.findOneBy({
+                    id: client_id
+                });
 
-            if (user && worker) {
-                const  user_email = user.email;
-                const user_name = user.full_name; 
-                const is_active = user.is_active;
-                const  worker_email = worker.email;
-                const worker_name = worker.full_name;  
-                return { is_active, user_email, user_name,worker_email,worker_name, ...rest, };
-            }
-            else {
-                return null
-            }
-        }));
+                const worker = await User.findOneBy({
+                    id: worker_id
+                });
+
+                if (user && worker) {
+                    const user_email = user.email;
+                    const user_name = user.full_name;
+                    const is_active = user.is_active;
+                    const worker_email = worker.email;
+                    const worker_name = worker.full_name;
+                    return { is_active, user_email, user_name, worker_email, worker_name, ...rest, };
+                }
+                else {
+                    return null
+                }
+            }));
 
         if (appointmentsAll.length == 0) {
             return res.json({
@@ -639,9 +638,73 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
     }
 }
 
-//obtener la cita a detalle
 const getAppointmentDetail = async (req: Request, res: Response) => {
+    try {
+        const idToken = req.token.id
+        const appointment_id = req.body.id
 
+        const getAllMyAppointment = await Appointment.find({
+            where: { id: appointment_id },
+            relations: ["appointmentPortfolios"]
+        })
+
+        const appointmentsUser = await Promise.all(
+            getAllMyAppointment.map(async (obj) => {
+                const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+
+                const getWorker = await User.findOneBy({
+                    id: worker_id
+                });
+
+                const getUser = await User.findOneBy({
+                    id: client_id
+                });
+
+                if (getWorker && getUser) {
+                    const worker_name = getWorker.full_name
+                    const worker_email = getWorker.email;
+                    const is_active = getWorker.is_active;
+                    const name = purchase[0]
+                    const client_id = getUser.full_name
+                    const client_email = getUser.email
+                    return { worker_name, worker_email, name, is_active, client_id, client_email, ...rest };
+                }
+                else {
+                    return null
+                }
+            })
+        );
+
+        if (!getAllMyAppointment) {
+            return res.json({
+                success: true,
+                message: "you must insert an id",
+            })
+        }
+
+        if (getAllMyAppointment.length === 0) {
+            return res.json({
+                success: true,
+                message: "Appointment not found",
+            })
+        }
+
+        return res.json({
+            success: true,
+            message: "Here is a list of all your appointments.",
+            data: appointmentsUser
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "Appointments cannot be retrieved, please try again.",
+            error
+        })
+    }
 }
 
-export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin }
+
+
+export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail }
