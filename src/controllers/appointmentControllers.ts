@@ -10,9 +10,29 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
     try {
         const idToken = req.token.id
 
+        if (typeof (req.query.skip) !== "string") {
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
+
+        if (typeof (req.query.page) !== "string") {
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page: any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
         const getAllMyAppointment = await Appointment.find({
             where: { client_id: idToken },
-            relations: ["appointmentPortfolios"]
+            relations: ["appointmentPortfolios"],
+            skip: skip,
+            take: pageSize
         })
 
         const appointmentsUser = await Promise.all(
@@ -20,6 +40,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
             getAllMyAppointment.map(async (obj) => {
                 const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
 
                 const getWorker = await User.findOneBy({
                     id: worker_id
@@ -30,7 +51,8 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                     const email = getWorker.email;
                     const is_active = getWorker.is_active;
                     const name = purchase[0]
-                    return { full_name, email, name, is_active, ...rest };
+                    const category = categoryPortfolio[0]
+                    return { full_name, email, name,category, is_active, ...rest };
                 }
                 else {
                     return null
