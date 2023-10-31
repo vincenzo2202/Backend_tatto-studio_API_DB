@@ -2,6 +2,7 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Role } from "../models/Role";
 
 const register = async (req: Request, res: Response) => {
 
@@ -125,10 +126,10 @@ const login = async (req: Request, res: Response) => {
             relations: ["role"]
         });
 
-        if(loginByEmail?.is_active !== true){
+        if (loginByEmail?.is_active !== true) {
             return res.json({
                 success: true,
-                message: "user doesn't exist" 
+                message: "user doesn't exist"
             })
         }
 
@@ -149,13 +150,13 @@ const login = async (req: Request, res: Response) => {
         const roles = loginByEmail.role.role_name;
 
         const secret = process.env.JWT_SECRET as string
- 
+
 
         const token = jwt.sign({
             id: loginByEmail.id,
             email: loginByEmail.email,
             role: roles
-        },secret, {
+        }, secret, {
             expiresIn: "3h"
         })
 
@@ -288,16 +289,16 @@ const updateUser = async (req: Request, res: Response) => {
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
-    try { 
+    try {
 
-        if(typeof(req.query.skip) !== "string"){
+        if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
                 message: "skip it's not string."
             })
         }
 
-        if(typeof(req.query.page) !== "string"){
+        if (typeof (req.query.page) !== "string") {
             return res.json({
                 success: true,
                 message: "page it's not string."
@@ -305,12 +306,12 @@ const getAllUsers = async (req: Request, res: Response) => {
         }
 
         const pageSize = parseInt(req.query.skip as string) || 5
-        const page:any = parseInt(req.query.page as string) || 1
+        const page: any = parseInt(req.query.page as string) || 1
         const skip = (page - 1) * pageSize
 
         const profileUser = await User.find({
-            skip:skip,
-            take:pageSize
+            skip: skip,
+            take: pageSize
         })
         if (profileUser.length == 0) {
             return res.json({
@@ -327,9 +328,9 @@ const getAllUsers = async (req: Request, res: Response) => {
                 name: users.full_name,
                 phone_number: users.phone_number,
                 is_active: users.is_active,
-                role_id:users.is_active,
-                created_at:users.is_active,
-                updated_at:users.is_active
+                role_id: users.is_active,
+                created_at: users.is_active,
+                updated_at: users.is_active
             };
         });
 
@@ -351,16 +352,16 @@ const getAllUsers = async (req: Request, res: Response) => {
 }
 
 const getAllWorkers = async (req: Request, res: Response) => {
-    try { 
+    try {
 
-        if(typeof(req.query.skip) !== "string"){
+        if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
                 message: "skip it's not string."
             })
         }
 
-        if(typeof(req.query.page) !== "string"){
+        if (typeof (req.query.page) !== "string") {
             return res.json({
                 success: true,
                 message: "page it's not string."
@@ -368,7 +369,7 @@ const getAllWorkers = async (req: Request, res: Response) => {
         }
 
         const pageSize = parseInt(req.query.skip as string) || 5
-        const page:any = parseInt(req.query.page as string) || 1
+        const page: any = parseInt(req.query.page as string) || 1
         const skip = (page - 1) * pageSize
 
         const profileUser = await User.find({
@@ -382,18 +383,19 @@ const getAllWorkers = async (req: Request, res: Response) => {
         if (profileUser.length == 0) {
             return res.json({
                 success: false,
-                message: "there are not any registered worker" 
+                message: "there are not any registered worker"
             })
         }
 
-       
+
         const mappingUsers = profileUser.map(users => {
-            if(users.is_active == true){
-            return { 
-                email: users.email,
-                name: users.full_name,
-                phone_number: users.phone_number 
-            };}
+            if (users.is_active == true) {
+                return {
+                    email: users.email,
+                    name: users.full_name,
+                    phone_number: users.phone_number
+                };
+            }
         });
 
         return res.json({
@@ -521,14 +523,14 @@ const createWorker = async (req: Request, res: Response) => {
             message: "worker can't be registered, try again",
             error
         })
-    } 
+    }
 
 }
 
 const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
-    
+
     try {
-        const deleteById = req.body.id 
+        const deleteById = req.body.id
 
         if (!deleteById) {
             return res.json({
@@ -542,7 +544,7 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
                 success: true,
                 mensaje: "id incorrect, you can put only numbers, try again"
             });
-        } 
+        }
 
         const deleteAppointmentById = await User.delete({
             id: deleteById
@@ -563,5 +565,68 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
 
 }
 
+const assignRole = async (req: Request, res: Response) => {
 
-export { register, login, profile, updateUser, getAllUsers, getAllWorkers,createWorker,deleteUserBySuperAdmin} 
+    try {
+        const bodyUser = req.body
+        const id = req.body.id
+        const role_id= req.body.role_id
+
+        if(!role_id){
+            return res.json({
+                success: true,
+                message: "You have to insert a role_id" 
+            })
+        }
+
+        if(!id){
+            return res.json({
+                success: true,
+                message: "You have to insert a id" 
+            })
+        }
+
+        if(role_id>3 || role_id<1){
+            return res.json({
+                success: true,
+                message: "role incorrect " 
+            })
+        } 
+
+        const users = await User.find()
+            
+        const mapping = users.map((obj)=>obj.id)
+
+        if(!mapping.includes(id)){
+            return res.json({
+                success: true,
+                message: "user_id not exist."
+            })
+        }
+        const updateOneUser = await User.update({
+            id:id
+        }, { 
+            role_id: role_id
+        }) 
+
+        return res.json({
+            success: true,
+            message: "Role updated successfully.",
+            data: {
+                full_name: bodyUser.full_name,
+                email: bodyUser.email, 
+                role_id: bodyUser.role_id
+            }
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "User can't be registered, please try again.",
+            error
+        })
+    }
+}
+
+
+export { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin, assignRole } 
