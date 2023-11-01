@@ -70,7 +70,7 @@ const validateString = (string: string, length: number) => {
     }
 };
 
-const validateAvailableDate = async (date: string, emailWorker: string, shift: string, res: object) => {
+const validateAvailableDate = async (date: string, emailWorker: string, shift: string) => {
 
     const today = new Date();
     const year = today.getFullYear();
@@ -81,8 +81,9 @@ const validateAvailableDate = async (date: string, emailWorker: string, shift: s
 
     if (todayFormatDate > date) {
         return {
+            success:true,
             isValid: false,
-            message: "This appointment is in the past. Please reschedule."
+            message: "This appointment has already passed. Kindly reschedule."
         };
     }
 
@@ -98,6 +99,7 @@ const validateAvailableDate = async (date: string, emailWorker: string, shift: s
 
     if (allAppointments.length !== 0) {
         return {
+            success:true,
             isValid: false,
             message: "The appointment is not available, try a different date or shift"
         };
