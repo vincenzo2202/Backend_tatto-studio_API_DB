@@ -70,38 +70,40 @@ const validateString = (string: string, length: number) => {
     }
 };
 
-const validateAvailableDate = async (date: string, shift: string, emailWorker: string) => {
+const validateAvailableDate = async (date: string, emailWorker: string, shift: string, res: object) => {
+
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const day = today.getDate();
+
     const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
     if (todayFormatDate > date) {
-        return "This appointment is in the past. Please reschedule."
-    };
+        return {
+            isValid: false,
+            message: "This appointment is in the past. Please reschedule."
+        };
+    }
 
     const findWorker = await User.findOneBy({
         email: emailWorker
-    })
+    });
 
     const allAppointments = await Appointment.findBy({
         date,
         shift,
         worker_id: findWorker?.id
-    })
+    });
 
     if (allAppointments.length !== 0) {
         return {
-            success: true,
+            isValid: false,
             message: "The appointment is not available, try a different date or shift"
         };
     }
 
-    return {
-        success: true,
-        message: "The appointment is available"
-    };
+    return { isValid: true };
 };
 
 const validateNumber = (number: number, length: number) => {
