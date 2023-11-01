@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment"
 import { User } from "../models/User";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 import { Portfolio } from "../models/Portfolio";
-const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validatePassword } = require('../validations/validations');
+const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber } = require('../validations/validations');
 
 
 const getAllMyAppointment = async (req: Request, res: Response) => {
@@ -337,10 +337,13 @@ const deleteAppointment = async (req: Request, res: Response) => {
         )
 
         if (!appointments_id.includes(deleteById)) {
-            return res.json("It cannot be deleted")
+            return res.json({
+                success: true,
+                message: "It cannot be deleted"
+            })
         }
 
-        const deleteAppointmentById = await Appointment.delete({
+        await Appointment.delete({
             id: deleteById
         })
 
@@ -585,6 +588,7 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
 const appointmentValidation = async (req: Request, res: Response) => {
     try {
         const { date, email: emailWorker, shift } = req.body
+        const idToken = req.token.id
 
         if (validateEmail(emailWorker)) {
             return res.json({ success: true, message: validateEmail(emailWorker) });
@@ -616,29 +620,38 @@ const appointmentValidation = async (req: Request, res: Response) => {
             email: emailWorker
         })
 
-        if (findWorker?.role_id !== 2){   
+        if (findWorker?.role_id !== 2) {
             return res.json({
                 success: true,
                 message: "Worker not found, try again."
             });
         }
-         
-        const allAppointments = await Appointment.findBy({
+
+        const allAppointments = await Appointment.findOneBy({
             date,
             shift,
             worker_id: findWorker?.id
-        })
+        }) 
 
-        if (allAppointments.length !== 0) {
+        if(!allAppointments){
             return res.json({
                 success: true,
-                message: "The appointment is not available, try a different date or shift"
+                message: "This appointment not exist"
+            });
+        }
+
+        const client_id = allAppointments?.client_id
+
+        if (idToken !== client_id){
+            return res.json({
+                success: true,
+                message: "this appointment it`s not yours"
             });
         }
 
         return res.json({
             success: true,
-            message: "The appointment is available"
+            message: "this appointment is yours and has been validated successfully"
         });
 
     } catch (error) {
