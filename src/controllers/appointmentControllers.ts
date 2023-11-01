@@ -616,6 +616,13 @@ const appointmentValidation = async (req: Request, res: Response) => {
             email: emailWorker
         })
 
+        if (findWorker?.role_id !== 2){   
+            return res.json({
+                success: true,
+                message: "Worker not found, try again."
+            });
+        }
+         
         const allAppointments = await Appointment.findBy({
             date,
             shift,
