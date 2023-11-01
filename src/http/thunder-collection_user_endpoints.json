@@ -1,0 +1,121 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "user_endpoints",
+    "dateExported": "2023-11-01T19:37:47.789Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "a30effef-ebbd-479a-a2af-71ddc2fb1709",
+            "colId": "ca8ee03f-2573-4648-9fc4-1a03abab6be7",
+            "containerId": "",
+            "name": "register user",
+            "url": "localhost:4000/user/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-10-26T18:57:20.261Z",
+            "modified": "2023-11-01T19:21:13.895Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"full_name\": \"isSuperAdmin\",\n  \"email\": \"isSuperAdmin@mail.com\",\n  \"password\": \"Aa1234@\",\n  \"phone_number\": 666666666\n}\n ",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a0c3b3c0-7f1e-4fe4-af4d-943a219350f2",
+            "colId": "ca8ee03f-2573-4648-9fc4-1a03abab6be7",
+            "containerId": "",
+            "name": "localhost:4000/user/login",
+            "url": "localhost:4000/user/login",
+            "method": "POST",
+            "sortNum": 15000,
+            "created": "2023-10-27T17:28:40.151Z",
+            "modified": "2023-11-01T19:32:30.322Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"vincenzo@mail.com\",\n  \"password\": \"Aa1234@\" \n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": " "
+            },
+            "tests": []
+        },
+        {
+            "_id": "e78a18bc-27f4-4f55-a483-7113b25ee5e7",
+            "colId": "ca8ee03f-2573-4648-9fc4-1a03abab6be7",
+            "containerId": "",
+            "name": "localhost:4000/user/profile",
+            "url": "localhost:4000/user/profile",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-10-27T17:28:48.663Z",
+            "modified": "2023-11-01T19:23:41.089Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImVtYWlsIjoidmluY2Vuem9AbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODg2NjYxMSwiZXhwIjoxNjk4ODc3NDExfQ.UXzezpvsK6S0OBqRm7FVtGTwM6XS3U-HKctJKpSND5g"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f99d4f2f-386f-4a72-b0a5-b02828006fdd",
+            "colId": "ca8ee03f-2573-4648-9fc4-1a03abab6be7",
+            "containerId": "",
+            "name": "localhost:4000/user/update",
+            "url": "localhost:4000/user/update",
+            "method": "PUT",
+            "sortNum": 40000,
+            "created": "2023-10-28T13:41:59.638Z",
+            "modified": "2023-11-01T19:24:00.765Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"full_name\": \"vincenzos  \", \n  \"password\": \"Aa1234@\",\n  \"phone_number\": 55555554\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImVtYWlsIjoidmluY2Vuem9AbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTY5ODg2NjYxMSwiZXhwIjoxNjk4ODc3NDExfQ.UXzezpvsK6S0OBqRm7FVtGTwM6XS3U-HKctJKpSND5g"
+            },
+            "tests": []
+        },
+        {
+            "_id": "5309648b-c24a-4ff3-8d0f-e9a59ef9ee05",
+            "colId": "ca8ee03f-2573-4648-9fc4-1a03abab6be7",
+            "containerId": "",
+            "name": "localhost:4000/user/AllWorkers",
+            "url": "localhost:4000/user/AllWorkers?skip=5&page=1",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-10-29T18:00:57.112Z",
+            "modified": "2023-11-01T19:24:48.283Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "skip",
+                    "value": "5",
+                    "isPath": false
+                },
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIsImVtYWlsIjoiaXNTdXBlckFkbWluQG1haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk4ODY2NjgwLCJleHAiOjE2OTg4Nzc0ODB9.wbtMg5lwCMgUbrAyXohM5uIovEaRU6oFnoIibd7kMDg"
+            },
+            "tests": []
+        }
+    ]
+}
