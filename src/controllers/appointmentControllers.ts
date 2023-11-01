@@ -52,7 +52,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                     const is_active = getWorker.is_active;
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { full_name, email, name,category, is_active, ...rest };
+                    return { full_name, email, name, category, is_active, ...rest };
                 }
                 else {
                     return null
@@ -77,11 +77,11 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
 
 const createAppointment = async (req: Request, res: Response) => {
 
-    try {  
+    try {
         const date = req.body.date
         const shift = req.body.shift
         const email = req.body.email
-        const   purchase = req.body.name
+        const purchase = req.body.name
         const idToken = req.token.id
 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -257,7 +257,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 id: createNewAppointment.id,
                 purchase: portfolio?.name,
                 price: portfolio?.price,
-                category:portfolio?.category,
+                category: portfolio?.category,
                 created_at: createNewAppointment.created_at,
                 updated_at: createNewAppointment.updated_at
             }
@@ -379,7 +379,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        
+
 
         const appointmentsClient = await Appointment.findBy({
             client_id,
@@ -432,7 +432,7 @@ const updateAppointment = async (req: Request, res: Response) => {
                 success: true,
                 message: "the name of the item purchase doesn't exist",
             })
-        } 
+        }
 
         const namePortfolio = await Portfolio.findOneBy({
             name
@@ -447,16 +447,16 @@ const updateAppointment = async (req: Request, res: Response) => {
         })
 
         await Appointment_portfolio.update({
-             appointment_id: id
-        }, { 
-            portfolio_id:namePortfolio?.id  
-        }) 
+            appointment_id: id
+        }, {
+            portfolio_id: namePortfolio?.id
+        })
 
         const appointmentUpdated = await Appointment.findOneBy({
             id: id
         })
 
-        const portfolio= await Portfolio.findOneBy({
+        const portfolio = await Portfolio.findOneBy({
             name
         })
 
@@ -584,7 +584,7 @@ const getAllArtist = async (req: Request, res: Response) => {
                     const is_active = user.is_active;
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { user_email, user_name, is_active ,name,category,...rest };
+                    return { user_email, user_name, is_active, name, category, ...rest };
                 }
                 else {
                     return null
@@ -636,7 +636,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
 
 
         const appointmentsUser = await Appointment.find({
-            
+
             relations: ["appointmentPortfolios"],
             skip: skip,
             take: pageSize
@@ -644,7 +644,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
 
         const appointmentsAll = await Promise.all(appointmentsUser
             .map(async (obj) => {
-                const { worker_id, client_id,appointmentPortfolios, ...rest } = obj;
+                const { worker_id, client_id, appointmentPortfolios, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
 
@@ -665,7 +665,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
                     const worker_name = worker.full_name;
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { is_active, user_email, user_name, worker_email, worker_name,name,category ,...rest, };
+                    return { is_active, user_email, user_name, worker_email, worker_name, name, category, ...rest, };
                 }
                 else {
                     return null
@@ -771,57 +771,28 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
 }
 
 const appointmentValidation = async (req: Request, res: Response) => {
-    try { 
-        const idToken = req.token.id
+    try {
+
         const appointment_id = req.body.id
         const date = req.body.date
         const shift = req.body.shift
 
         const getAllMyAppointment = await Appointment.find({
-            where: { id: appointment_id },
-            relations: ["appointmentPortfolios"]
-        })
+            where: { id: appointment_id } 
+        }) 
 
-        const appointmentsUser = await Promise.all(
-            getAllMyAppointment.map(async (obj) => {
-                const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
-                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+        const appointmentDetail = getAllMyAppointment.find(obj => obj?.date === date && obj?.shift === shift);
 
-                const getWorker = await User.findOneBy({
-                    id: worker_id
-                });
-
-                const getUser = await User.findOneBy({
-                    id: client_id
-                });
-
-                if (getWorker && getUser) {
-                    const worker_name = getWorker.full_name
-                    const worker_email = getWorker.email;
-                    const is_active = getWorker.is_active;
-                    const name = purchase[0]
-                    const client_id = getUser.full_name
-                    const client_email = getUser.email
-                    return { worker_name, worker_email, name, is_active, client_id, client_email, ...rest };
-                }
-                else {
-                    return null
-                }
-            })
-        );
-
-        const appointmentDetail = appointmentsUser.find(obj => obj?.date === date && obj?.shift === shift);
-
-        if (appointmentDetail?.date  == date && appointmentDetail?.shift == shift) { 
+        if (appointmentDetail?.date == date && appointmentDetail?.shift == shift) {
             return res.json({
                 success: true,
-                message: "The appointment is not available, try a different date or shift" 
+                message: "The appointment is not available, try a different date or shift"
             });
         }
- 
+
         return res.json({
             success: true,
-            message: "Appointment available" 
+            message: "Appointment available"
         });
 
     } catch (error) {
@@ -833,8 +804,8 @@ const appointmentValidation = async (req: Request, res: Response) => {
     }
 }
 
-  
 
 
 
-export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail,appointmentValidation }
+
+export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail, appointmentValidation }
