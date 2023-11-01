@@ -15,7 +15,7 @@ const register = async (req: Request, res: Response) => {
         }
 
         if (validateEmail(email)) {
-            return res.json({ success: true, message: validateEmail(full_name,50) });
+            return res.json({ success: true, message: validateEmail(email) });
         }
 
         if (validatePassword(password)) {
@@ -62,6 +62,8 @@ const login = async (req: Request, res: Response) => {
             where: { email },
             relations: ["role"]
         });
+
+        
 
         if (loginByEmail?.is_active !== true) {
             return res.json({
@@ -118,7 +120,11 @@ const profile = async (req: Request, res: Response) => {
         const email = req.token.email
         const profileUser = await User.findOneBy({
             email
-        })
+        }) 
+
+        if (validateEmail(email)) {
+            return res.json({ success: true, message: validateEmail(email) });
+        } 
 
         return res.json({
             success: true,
@@ -143,32 +149,18 @@ const updateUser = async (req: Request, res: Response) => {
 
     try {
         const { full_name, password, phone_number } = req.body
-        const id = req.token.id
+        const id = req.token.id 
 
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
-
-
-        if (typeof (full_name) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
-            });
+        if (validateString (full_name,50)) {
+            return res.json({ success: true, message: validateString(full_name,50) });
         }
 
-        if (full_name.length > 50) {
-            return res.json({
-                success: true,
-                mensaje: 'Name is too long. Please insert a shorter name (maximum 50 characters).'
-            });
+        if (validatePassword(password)) {
+            return res.json({ success: true, message: validatePassword(password) });
         }
-
-        
-        if (typeof (phone_number) !== "number") {
-            return res.json({
-                success: true,
-                mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
-            });
-        }
+        if (validateNumber(phone_number,12)) {
+            return res.json({ success: true, message: validateNumber(phone_number,12) });
+        } 
 
         const encrytedPassword = await bcrypt.hash(password, 10)
 
