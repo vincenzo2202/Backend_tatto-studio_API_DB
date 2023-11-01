@@ -75,7 +75,7 @@ const validateAvailableDate = async (date: string, emailWorker: string, shift: s
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
-    const day = today.getDate();
+    const day = today.getDate()+1;
 
     const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
