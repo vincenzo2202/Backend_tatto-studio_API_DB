@@ -5,9 +5,7 @@ import jwt from "jsonwebtoken";
 const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validatePassword } = require('../validations/validations');
 
 const register = async (req: Request, res: Response) => {
-
     try {
-
         const { full_name, email, password, phone_number } = req.body
 
         if (validateString(full_name, 50)) {
@@ -54,7 +52,6 @@ const register = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {
-
     try {
         const { email, password } = req.body
 
@@ -62,8 +59,6 @@ const login = async (req: Request, res: Response) => {
             where: { email },
             relations: ["role"]
         });
-
-
 
         if (loginByEmail?.is_active !== true) {
             return res.json({
@@ -87,10 +82,7 @@ const login = async (req: Request, res: Response) => {
         }
 
         const roles = loginByEmail.role.role_name;
-
         const secret = process.env.JWT_SECRET as string
-
-
         const token = jwt.sign({
             id: loginByEmail.id,
             email: loginByEmail.email,
@@ -115,7 +107,6 @@ const login = async (req: Request, res: Response) => {
 }
 
 const profile = async (req: Request, res: Response) => {
-
     try {
         const email = req.token.email
         const profileUser = await User.findOneBy({
@@ -146,7 +137,6 @@ const profile = async (req: Request, res: Response) => {
 }
 
 const updateUser = async (req: Request, res: Response) => {
-
     try {
         const { full_name, password, phone_number } = req.body
         const id = req.token.id
@@ -192,7 +182,6 @@ const updateUser = async (req: Request, res: Response) => {
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {
-
         if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
@@ -233,7 +222,6 @@ const getAllUsers = async (req: Request, res: Response) => {
             message: "profile user retrieved",
             data: mappingUsers
         })
-
     } catch (error) {
         return res.json({
             success: false,
@@ -241,13 +229,10 @@ const getAllUsers = async (req: Request, res: Response) => {
             error
         })
     }
-
-
 }
 
 const getAllWorkers = async (req: Request, res: Response) => {
     try {
-
         if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
@@ -281,7 +266,6 @@ const getAllWorkers = async (req: Request, res: Response) => {
             })
         }
 
-
         const mappingUsers = profileUser.map(users => {
             if (users.is_active == true) {
                 return {
@@ -305,8 +289,6 @@ const getAllWorkers = async (req: Request, res: Response) => {
             error
         })
     }
-
-
 }
 
 const createWorker = async (req: Request, res: Response) => {
@@ -347,7 +329,6 @@ const createWorker = async (req: Request, res: Response) => {
                 phone_number: newUser.phone_number
             }
         })
-
     } catch (error) {
         return res.json({
             success: false,
@@ -362,7 +343,6 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
     try {
         const deleteById = req.body.id
 
-
         if (validateNumber(deleteById, 7)) {
             return res.json({ success: true, message: validateNumber(deleteById, 12) });
         }
@@ -375,7 +355,6 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
             success: true,
             message: "The user was successfully deleted.",
         })
-
     } catch (error) {
         return res.json({
             success: false,
@@ -386,17 +365,12 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
 }
 
 const assignRole = async (req: Request, res: Response) => {
-
     try {
-
         const { id, role_id, full_name, email } = req.body
-
 
         if (validateNumber(role_id, 2)) {
             return res.json({ success: true, message: validateNumber(role_id, 2) });
         }
-
-
 
         if (role_id > 3 || role_id < 1) {
             return res.json({
@@ -405,13 +379,11 @@ const assignRole = async (req: Request, res: Response) => {
             })
         }
 
-
         if (validateNumber(id, 2)) {
             return res.json({ success: true, message: validateNumber(id, 2) });
         }
 
         const users = await User.find()
-
         const mapping = users.map((obj) => obj.id)
 
         if (!mapping.includes(id)) {
@@ -423,7 +395,8 @@ const assignRole = async (req: Request, res: Response) => {
 
         await User.update({
             id: id
-        }, {
+        }, 
+        {
             role_id: role_id
         })
 
@@ -436,7 +409,6 @@ const assignRole = async (req: Request, res: Response) => {
                 role_id: role_id
             }
         })
-
     } catch (error) {
         return res.json({
             success: false,

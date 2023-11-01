@@ -8,25 +8,22 @@ const validateEmail = (email: string) => {
 
     if (!email) {
         return "you must insert an email"
-    } 
+    }
 
     if (typeof (email) !== "string") {
         return 'Incorrect email, it should only contain strings'
     };
 
-
     if (email.length > 100) {
         return 'Email is too long, please try a shorter one. Maximum 100 characters'
     };
 
-
     if (!emailRegex.test(email)) {
         return 'Incorrect email format. Please try again'
     };
-
 };
 
-const validateDate = (date:string) => {
+const validateDate = (date: string) => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!date) {
         return "you must insert a date"
@@ -36,37 +33,31 @@ const validateDate = (date:string) => {
         return "date incorrect, you can put only strings, try again"
     };
 
-
     if (!dateRegex.test(date)) {
         return "date incorrect, The date format should be YYYY-MM-DD, try again"
     };
-
-
 };
 
-const validateShift = (shift:string) => {
+const validateShift = (shift: string) => {
     if (!shift) {
         return "you must insert a shift"
     }
-
 
     if (typeof (shift) !== "string") {
         return "shift incorrect, you can put only strings, try again"
     };
 
-
     if (shift !== "morning" && shift !== "afternoon") {
         return "shift incorrect, you only can put morning or afternoon, try again"
     };
-
 };
 
-const validateString = (string:string, length: number) => {
+const validateString = (string: string, length: number) => {
     if (!string) {
-        return "you must insert an name "+ string
+        return "you must insert an name " + string
     }
 
-    if (typeof(string) !== "string") {
+    if (typeof (string) !== "string") {
         return `you must insert a strings`
     };
 
@@ -74,26 +65,21 @@ const validateString = (string:string, length: number) => {
         return `${string} too short, try to insert a larger one, max  ${length} characters`
     };
 
-
     if (string.length > length) {
         return `${string} too long, try to insert a shorter one, max ${length} characters`
     }
-
 };
 
-const validateAvailableDate = async (date:string,shift:string, emailWorker:string ) => {
-
-    const today = new Date(); 
+const validateAvailableDate = async (date: string, shift: string, emailWorker: string) => {
+    const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
     const day = today.getDate();
-
     const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-    if(todayFormatDate > date){
+    if (todayFormatDate > date) {
         return "This appointment is in the past. Please reschedule."
-        };
-    
+    };
 
     const findWorker = await User.findOneBy({
         email: emailWorker
@@ -116,27 +102,25 @@ const validateAvailableDate = async (date:string,shift:string, emailWorker:strin
         success: true,
         message: "The appointment is available"
     };
-
 };
 
-const validateNumber =  (number:number,length:number) => {
+const validateNumber = (number: number, length: number) => {
 
     if (!number) {
-        return "you must insert an number " 
+        return "you must insert an number "
     }
 
-    if (typeof(number) !== "number") {
+    if (typeof (number) !== "number") {
         return `you must insert a number`
-    }; 
+    };
 
     const toString = number.toString()
 
-    if (toString.length > length){
+    if (toString.length > length) {
         return `number too long, max ${length},try again`
     }
-
 };
-const validatePassword = (password:string) => {
+const validatePassword = (password: string) => {
 
     const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
@@ -155,7 +139,7 @@ const validatePassword = (password:string) => {
     }
 
     if (password.length > 100) {
-        return  {
+        return {
             success: true,
             mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
         };
