@@ -1,99 +1,37 @@
 import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { Role } from "../models/Role";
+import jwt from "jsonwebtoken"; 
+const { validateEmail,  validateDate,   validateShift,  validateString, validateAvailableDate,  validateNumber,  validatePassword} = require('../validations/validations');
 
 const register = async (req: Request, res: Response) => {
 
     try {
-        const createUserBody = req.body;
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
+        
+        const { full_name, email, password, phone_number } = req.body
 
-        if (typeof (createUserBody.full_name) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'name incorrect, you can put only strings, try again'
-            });
+        if (validateString (full_name,50)) {
+            return res.json({ success: true, message: validateString(full_name,50) });
         }
 
-        if (createUserBody.full_name.length < 1) {
-            return res.json({
-                success: true,
-                mensaje: 'name too long, try to insert a shorter name, max 50 characters'
-            });
-        }
-        if (createUserBody.full_name.length > 50) {
-            return res.json({
-                success: true,
-                mensaje: 'name too long, try to insert a shorter name, max 50 characters'
-            });
+        if (validateEmail(email)) {
+            return res.json({ success: true, message: validateEmail(full_name,50) });
         }
 
-        if (typeof (createUserBody.email) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'email incorrect, you can put only strings, try again'
-            });
+        if (validatePassword(password)) {
+            return res.json({ success: true, message: validatePassword(password) });
+        }
+        if (validateNumber(phone_number,12)) {
+            return res.json({ success: true, message: validateNumber(phone_number,12) });
         }
 
-        if (createUserBody.email.length > 100) {
-            return res.json({
-                success: true,
-                mensaje: 'name too long, try to insert a shorter name, max 100 characters'
-            });
-        }
-
-        if (!emailRegex.test(req.body.email)) {
-            return res.json({
-                success: true,
-                mensaje: 'email incorrect, try again'
-            });
-        }
-
-        if (typeof (createUserBody.password) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'password incorrect, you can put only strings, try again'
-            });
-        }
-
-        if (createUserBody.password.length > 100) {
-            return res.json({
-                success: true,
-                mensaje: 'password too long, try to insert a shorter name, max 100 characters'
-            });
-        }
-
-        if (!passwordRegex.test(req.body.password)) {
-            return res.json({
-                success: true,
-                mensaje: 'password incorrect, try again'
-            });
-        }
-
-        if (typeof (createUserBody.phone_number) !== "number") {
-            return res.json({
-                success: true,
-                mensaje: 'phone_number incorrect, you can put only numbers, try again'
-            });
-        }
-
-        if (createUserBody.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                mensaje: 'phone_number too long, try to insert a shorter name, max 20 characters'
-            });
-        }
-
-        const encrytedPassword = await bcrypt.hash(createUserBody.password, 10)
+        const encrytedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
-            full_name: createUserBody.full_name,
-            email: createUserBody.email,
+            full_name: full_name,
+            email: email,
             password: encrytedPassword,
-            phone_number: createUserBody.phone_number
+            phone_number: phone_number
         }).save()
 
         return res.json({
@@ -118,8 +56,7 @@ const register = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
 
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body
 
         const loginByEmail = await User.findOne({
             where: { email },
@@ -205,77 +142,50 @@ const profile = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
 
     try {
-        const bodyUser = req.body
+        const { full_name, password, phone_number } = req.body
         const id = req.token.id
 
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
 
-        if (typeof (bodyUser.full_name) !== "string") {
+        if (typeof (full_name) !== "string") {
             return res.json({
                 success: true,
                 mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
             });
         }
 
-        if (bodyUser.full_name.length > 50) {
+        if (full_name.length > 50) {
             return res.json({
                 success: true,
                 mensaje: 'Name is too long. Please insert a shorter name (maximum 50 characters).'
             });
         }
 
-        if (typeof (bodyUser.password) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'Password is incorrect; only strings are allowed. Please try again'
-            });
-        }
-
-        if (bodyUser.password.length > 100) {
-            return res.json({
-                success: true,
-                mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
-            });
-        }
-
-        if (!passwordRegex.test(req.body.password)) {
-            return res.json({
-                success: true,
-                mensaje: 'Password is incorrect. Please try again'
-            });
-        }
-
-        if (typeof (bodyUser.phone_number) !== "number") {
+        
+        if (typeof (phone_number) !== "number") {
             return res.json({
                 success: true,
                 mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
             });
         }
 
-        if (bodyUser.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
-            });
-        }
+        const encrytedPassword = await bcrypt.hash(password, 10)
 
-        const encrytedPassword = await bcrypt.hash(bodyUser.password, 10)
-
-        const updateOneUser = await User.update({
+        await User.update({
             id
         }, {
-            full_name: bodyUser.full_name,
+            full_name: full_name,
             password: encrytedPassword,
-            phone_number: bodyUser.phone_number
+            phone_number: phone_number
         })
 
         return res.json({
             success: true,
             message: "User updated successfully.",
             data: {
-                full_name: bodyUser.full_name,
-                phone_number: bodyUser.phone_number
+                full_name: full_name,
+                phone_number: phone_number
             }
         })
 
@@ -316,22 +226,13 @@ const getAllUsers = async (req: Request, res: Response) => {
         if (profileUser.length == 0) {
             return res.json({
                 success: false,
-                message: "there are not any registered users",
-
+                message: "there are not any registered users"
             })
         }
 
         const mappingUsers = profileUser.map(users => {
-            return {
-                id: users.id,
-                email: users.email,
-                name: users.full_name,
-                phone_number: users.phone_number,
-                is_active: users.is_active,
-                role_id: users.is_active,
-                created_at: users.is_active,
-                updated_at: users.is_active
-            };
+            const { password, ...rest } = users
+            return { ...rest };
         });
 
         return res.json({
@@ -417,59 +318,61 @@ const getAllWorkers = async (req: Request, res: Response) => {
 
 const createWorker = async (req: Request, res: Response) => {
     try {
-        const createUserBody = req.body;
+        const { full_name, email, password, phone_number } = req.body;
+
+
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
-        if (typeof (createUserBody.full_name) !== "string") {
+        if (typeof (full_name) !== "string") {
             return res.json({
                 success: true,
                 mensaje: 'name incorrect, you can put only strings, try again'
             });
         }
 
-        if (createUserBody.full_name.length < 1) {
+        if (full_name.length < 1) {
             return res.json({
                 success: true,
                 mensaje: 'name too long, try to insert a shorter name, max 50 characters'
             });
         }
-        if (createUserBody.full_name.length > 50) {
+        if (full_name.length > 50) {
             return res.json({
                 success: true,
                 mensaje: 'name too long, try to insert a shorter name, max 50 characters'
             });
         }
 
-        if (typeof (createUserBody.email) !== "string") {
+        if (typeof (email) !== "string") {
             return res.json({
                 success: true,
                 mensaje: 'email incorrect, you can put only strings, try again'
             });
         }
 
-        if (createUserBody.email.length > 100) {
+        if (email.length > 100) {
             return res.json({
                 success: true,
                 mensaje: 'name too long, try to insert a shorter name, max 100 characters'
             });
         }
 
-        if (!emailRegex.test(req.body.email)) {
+        if (!emailRegex.test(email)) {
             return res.json({
                 success: true,
                 mensaje: 'email incorrect, try again'
             });
         }
 
-        if (typeof (createUserBody.password) !== "string") {
+        if (typeof (password) !== "string") {
             return res.json({
                 success: true,
                 mensaje: 'password incorrect, you can put only strings, try again'
             });
         }
 
-        if (createUserBody.password.length > 100) {
+        if (password.length > 100) {
             return res.json({
                 success: true,
                 mensaje: 'password too long, try to insert a shorter name, max 100 characters'
@@ -483,27 +386,20 @@ const createWorker = async (req: Request, res: Response) => {
             });
         }
 
-        if (typeof (createUserBody.phone_number) !== "number") {
+        if (typeof (phone_number) !== "number") {
             return res.json({
                 success: true,
                 mensaje: 'phone_number incorrect, you can put only numbers, try again'
             });
         }
 
-        if (createUserBody.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                mensaje: 'phone_number too long, try to insert a shorter name, max 20 characters'
-            });
-        }
-
-        const encrytedPassword = await bcrypt.hash(createUserBody.password, 10)
+        const encrytedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
-            full_name: createUserBody.full_name,
-            email: createUserBody.email,
+            full_name: full_name,
+            email: email,
             password: encrytedPassword,
-            phone_number: createUserBody.phone_number,
+            phone_number: phone_number,
             role_id: 2
         }).save()
 
@@ -528,7 +424,6 @@ const createWorker = async (req: Request, res: Response) => {
 }
 
 const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
-
     try {
         const deleteById = req.body.id
 
@@ -546,7 +441,7 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
             });
         }
 
-        const deleteAppointmentById = await User.delete({
+        await User.delete({
             id: deleteById
         })
 
@@ -567,55 +462,54 @@ const deleteUserBySuperAdmin = async (req: Request, res: Response) => {
 
 const assignRole = async (req: Request, res: Response) => {
 
-    try {
-        const bodyUser = req.body
-        const id = req.body.id
-        const role_id= req.body.role_id
+    try { 
 
-        if(!role_id){
+        const {id,role_id,full_name,email} = req.body 
+
+        if (!role_id) {
             return res.json({
                 success: true,
-                message: "You have to insert a role_id" 
+                message: "You have to insert a role_id"
             })
         }
 
-        if(!id){
+        if (!id) {
             return res.json({
                 success: true,
-                message: "You have to insert a id" 
+                message: "You have to insert a id"
             })
         }
 
-        if(role_id>3 || role_id<1){
+        if (role_id > 3 || role_id < 1) {
             return res.json({
                 success: true,
-                message: "role incorrect " 
+                message: "role incorrect "
             })
-        } 
+        }
 
         const users = await User.find()
-            
-        const mapping = users.map((obj)=>obj.id)
 
-        if(!mapping.includes(id)){
+        const mapping = users.map((obj) => obj.id)
+
+        if (!mapping.includes(id)) {
             return res.json({
                 success: true,
                 message: "user_id not exist."
             })
         }
         const updateOneUser = await User.update({
-            id:id
-        }, { 
+            id: id
+        }, {
             role_id: role_id
-        }) 
+        })
 
         return res.json({
             success: true,
             message: "Role updated successfully.",
             data: {
-                full_name: bodyUser.full_name,
-                email: bodyUser.email, 
-                role_id: bodyUser.role_id
+                full_name: full_name,
+                email:  email,
+                role_id: role_id
             }
         })
 

@@ -3,6 +3,7 @@ import { Appointment } from "../models/Appointment"
 import { User } from "../models/User";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 import { Portfolio } from "../models/Portfolio";
+const { validateEmail, validateDate, validateShift, validateString } = require('../validations/validations');
 
 
 const getAllMyAppointment = async (req: Request, res: Response) => {
@@ -77,49 +78,24 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
 
 const createAppointment = async (req: Request, res: Response) => {
 
-    try {
-        const date = req.body.date
-        const shift = req.body.shift
-        const email = req.body.email
-        const purchase = req.body.name
+    try { 
         const idToken = req.token.id
+        const {date,shift,email, name: purchase} =req.body
 
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-        if (!email) {
-            return res.json({
-                success: true,
-                message: "you must insert an email",
-            })
+        if (validateDate(date)) {
+            return res.json({ success: true, message: validateDate(date) });
         }
 
-        if (email.length == 0) {
-            return res.json({
-                success: true,
-                mensaje: 'name too short, try to insert a larger name, max 100 characters'
-            });
+        if (validateShift(shift)) {
+            return res.json({ success: true, message: validateShift(shift) });
         }
 
-        if (typeof (email) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'Incorrect email, it should only contain strings'
-            });
+        if (validateString(purchase, 100)) {
+            return res.json({ success: true, message: validateString(purchase, 100) });
         }
 
-        if (email.length > 100) {
-            return res.json({
-                success: true,
-                mensaje: 'Email is too long, please try a shorter one. Maximum 100 characters'
-            });
-        }
-
-        if (!emailRegex.test(email)) {
-            return res.json({
-                success: true,
-                mensaje: 'Incorrect email format. Please try again'
-            });
+        if (validateEmail(email)) {
+            return res.json({ success: true, message: validateEmail(email) });
         }
 
         const findWorkerByEmail = await User.findOne({
@@ -149,76 +125,6 @@ const createAppointment = async (req: Request, res: Response) => {
             })
         }
 
-        if (!date) {
-            return res.json({
-                success: true,
-                message: "you must insert a date",
-            })
-        }
-
-        if (typeof (date) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: "date incorrect, you can put only strings, try again"
-            });
-        }
-
-        if (!dateRegex.test(date)) {
-            return res.json({
-                success: true,
-                mensaje: "date incorrect, The date format should be YYYY-MM-DD, try again"
-            });
-        }
-
-        if (!shift) {
-            return res.json({
-                success: true,
-                message: "you must insert a shift",
-            })
-        }
-
-        if (typeof (shift) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: "shift incorrect, you can put only strings, try again"
-            });
-        }
-
-        if (shift !== "morning" && shift !== "afternoon") {
-            return res.json({
-                success: true,
-                mensaje: "shift incorrect, you only can put morning or afternoon, try again"
-            });
-        }
-
-        if (!purchase) {
-            return res.json({
-                success: true,
-                message: "you must insert an name",
-            })
-        }
-
-        if (typeof (purchase) !== "string") {
-            return res.json({
-                success: true,
-                mensaje: 'name incorrect, you can put only strings, try again'
-            });
-        }
-
-        if (purchase.length == 0) {
-            return res.json({
-                success: true,
-                mensaje: 'name too short, try to insert a larger name, max 100 characters'
-            });
-        }
-
-        if (purchase.length > 100) {
-            return res.json({
-                success: true,
-                mensaje: 'name too long, try to insert a shorter name, max 100 characters'
-            });
-        }
-
         const findPurchase = await Portfolio.find()
 
         const mapping = findPurchase.map((obj) => obj.name)
@@ -244,8 +150,7 @@ const createAppointment = async (req: Request, res: Response) => {
         await Appointment_portfolio.create({
             appointment_id: createNewAppointment.id,
             portfolio_id: portfolio?.id
-        }).save()
-
+        }).save()  
 
         return res.json({
             success: true,
@@ -254,6 +159,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 date: createNewAppointment.date,
                 shift: createNewAppointment.shift,
                 email: email,
+                worker:findWorkerByEmail?.full_name,
                 id: createNewAppointment.id,
                 purchase: portfolio?.name,
                 price: portfolio?.price,
@@ -458,7 +364,7 @@ const updateAppointment = async (req: Request, res: Response) => {
 
         const portfolio = await Portfolio.findOneBy({
             name
-        })
+        }) 
 
         return res.json({
             success: true,
@@ -466,6 +372,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             data: {
                 date,
                 shift,
+                Worker: findWorker_id?.full_name,
                 email,
                 id: id,
                 name,
@@ -771,19 +678,47 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
 }
 
 const appointmentValidation = async (req: Request, res: Response) => {
-    try {
+    try { 
+        const {date, email: emailWorker, shift} = req.body
 
-        const appointment_id = req.body.id
-        const date = req.body.date
-        const shift = req.body.shift
+        if (validateEmail(emailWorker)) {
+            return res.json({ success: true, message: validateEmail(emailWorker) });
+        }
 
-        const getAllMyAppointment = await Appointment.find({
-            where: { id: appointment_id } 
-        }) 
+        if (validateDate(date)) {
+            return res.json({ success: true, message: validateDate(date) });
+        }
 
-        const appointmentDetail = getAllMyAppointment.find(obj => obj?.date === date && obj?.shift === shift);
+        if (validateShift(shift)) {
+            return res.json({ success: true, message: validateShift(shift) });
+        } 
 
-        if (appointmentDetail?.date == date && appointmentDetail?.shift == shift) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+
+        const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+        if (todayFormatDate > date) {
+            return res.json({
+                success: true,
+                message: "This appointment is in the past. Please reschedule."
+            });
+        }
+
+    
+        const findWorker = await User.findOneBy({
+            email: emailWorker
+        })
+
+        const allAppointments = await Appointment.findBy({
+            date,
+            shift,
+            worker_id: findWorker?.id
+        })
+
+        if (allAppointments.length !== 0) {
             return res.json({
                 success: true,
                 message: "The appointment is not available, try a different date or shift"
@@ -792,7 +727,7 @@ const appointmentValidation = async (req: Request, res: Response) => {
 
         return res.json({
             success: true,
-            message: "Appointment available"
+            message: "The appointment is available"
         });
 
     } catch (error) {
@@ -803,9 +738,5 @@ const appointmentValidation = async (req: Request, res: Response) => {
         })
     }
 }
-
-
-
-
 
 export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail, appointmentValidation }
