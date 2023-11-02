@@ -386,7 +386,7 @@ const getAllArtist = async (req: Request, res: Response) => {
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const user = obj.client 
-                
+
                 if (user) {
                     const user_email = user.email;
                     const user_name = user.full_name
@@ -444,31 +444,25 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
         const skip = (page - 1) * pageSize
 
         const appointmentsUser = await Appointment.find({
-            relations: ["appointmentPortfolios"],
+            relations: ["appointmentPortfolios","client", "worker"],
             skip: skip,
             take: pageSize
         })
 
         const appointmentsAll = await Promise.all(appointmentsUser
             .map(async (obj) => {
-                const { worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+                const { worker_id, client_id, appointmentPortfolios, client, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
-
-                const user = await User.findOneBy({
-                    id: client_id
-                });
-
-                const worker = await User.findOneBy({
-                    id: worker_id
-                });
+                const user = obj.client
+                const workerObj = obj.worker 
 
                 if (user && worker) {
                     const user_email = user.email;
                     const user_name = user.full_name;
                     const is_active = user.is_active;
-                    const worker_email = worker.email;
-                    const worker_name = worker.full_name;
+                    const worker_email = workerObj.email;
+                    const worker_name = workerObj.full_name;
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
                     return { is_active, user_email, user_name, worker_email, worker_name, name, category, ...rest, };
