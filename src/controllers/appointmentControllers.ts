@@ -501,22 +501,19 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
 
         const getAllMyAppointment = await Appointment.find({
             where: { client_id: idToken },
-            relations: ["appointmentPortfolios"]
+            relations: ["appointmentPortfolios","worker"]
         })
 
         const appointmentsUser = await Promise.all(
             getAllMyAppointment.map(async (obj) => {
-                const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+                const { status, worker_id, client_id, appointmentPortfolios,worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
-
-                const getWorker = await User.findOneBy({
-                    id: worker_id
-                });
-
-                if (getWorker) {
-                    const worker_name = getWorker.full_name
-                    const worker_email = getWorker.email;
-                    const is_active = getWorker.is_active;
+                const workerObj = obj.worker 
+  
+                if (workerObj) {
+                    const worker_name = workerObj.full_name
+                    const worker_email = workerObj.email;
+                    const is_active = workerObj.is_active;
                     const name = purchase[0]
                     return { worker_name, worker_email, name, is_active, ...rest };
                 }
