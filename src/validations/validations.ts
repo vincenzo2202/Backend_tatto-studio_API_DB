@@ -70,45 +70,45 @@ const validateString = (string: string, length: number) => {
     }
 };
 
-const validateAvailableDate = async (date: string, emailWorker: string, shift: string) => {
+const validateAvailableDate = async (date: string, emailWorker: string, shift: string, idToken:number) => {
 
+   
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
-    const day = today.getDate()+1;
+    const day = today.getDate() + 1;
 
     const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
     if (todayFormatDate > date) {
         return {
-            success:true,
             isValid: false,
-            message: "This appointment has already passed. Kindly reschedule."
+            message: "this day is prior to the current day, try again."
         };
     }
 
-    const findWorker = await User.findOneBy({
-        email: emailWorker
+    const findAppointmentWorker = await Appointment.find({
+        where: {
+            date,
+            shift,
+        },
+        relations: ["worker"],
+    })
+
+    let isValid = true;
+
+    findAppointmentWorker.forEach(appointment => {
+        if (appointment.worker.role_id !== 2 ||
+            appointment.date === date && appointment.shift === shift &&
+            appointment.worker.email === emailWorker) {
+            isValid = false;
+        }
     });
-
-    if (findWorker?.role_id !== 2){   
-        return { 
-            isValid:false,
-            message: "Worker not found, try again."
-        };
-    }
-
-    const allAppointments = await Appointment.findBy({
-        date,
-        shift,
-        worker_id: findWorker?.id
-    });
-
-    if (allAppointments.length !== 0) {
+    
+    if (!isValid) {
         return {
-            success:true,
             isValid: false,
-            message: "The appointment is not available, try a different date or shift"
+            message: "this appointment it's not available, try again"
         };
     }
 
