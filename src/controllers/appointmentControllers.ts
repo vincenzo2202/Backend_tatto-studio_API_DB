@@ -35,7 +35,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
             take: pageSize
         })
 
-        const appointmentsUser = await Promise.all( 
+        const appointmentsUser = await Promise.all(
             getAllMyAppointment.map(async (obj) => {
                 const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
@@ -238,10 +238,10 @@ const updateAppointment = async (req: Request, res: Response) => {
                 message: "appointment updated not succesfully, incorrect id"
             })
         }
- 
+
 
         const namePortfolio = await Portfolio.findOneBy({
-            name 
+            name
         })
 
         if (!namePortfolio) {
@@ -374,7 +374,7 @@ const getAllArtist = async (req: Request, res: Response) => {
 
         const appointmentsWorker = await Appointment.find({
             where: { worker_id: id },
-            relations: ["appointmentPortfolios","client"],
+            relations: ["appointmentPortfolios", "client"],
             skip: skip,
             take: pageSize
         })
@@ -382,10 +382,10 @@ const getAllArtist = async (req: Request, res: Response) => {
         const appointmentsWorkers = await Promise.all(appointmentsWorker
             .filter((obj) => obj.status === false)
             .map(async (obj) => {
-                const { worker_id, client_id, appointmentPortfolios, client,...rest } = obj;
+                const { worker_id, client_id, appointmentPortfolios, client, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
-                const user = obj.client 
+                const user = obj.client
 
                 if (user) {
                     const user_email = user.email;
@@ -444,7 +444,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
         const skip = (page - 1) * pageSize
 
         const appointmentsUser = await Appointment.find({
-            relations: ["appointmentPortfolios","client", "worker"],
+            relations: ["appointmentPortfolios", "client", "worker"],
             skip: skip,
             take: pageSize
         })
@@ -455,7 +455,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const user = obj.client
-                const workerObj = obj.worker 
+                const workerObj = obj.worker
 
                 if (user && worker) {
                     const user_email = user.email;
@@ -501,15 +501,15 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
 
         const getAllMyAppointment = await Appointment.find({
             where: { client_id: idToken },
-            relations: ["appointmentPortfolios","worker"]
+            relations: ["appointmentPortfolios", "worker"]
         })
 
         const appointmentsUser = await Promise.all(
             getAllMyAppointment.map(async (obj) => {
-                const { status, worker_id, client_id, appointmentPortfolios,worker, ...rest } = obj;
+                const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
-                const workerObj = obj.worker 
-  
+                const workerObj = obj.worker
+
                 if (workerObj) {
                     const worker_name = workerObj.full_name
                     const worker_email = workerObj.email;
@@ -590,40 +590,36 @@ const appointmentValidation = async (req: Request, res: Response) => {
                 success: true,
                 message: "This appointment is in the past. Please reschedule."
             });
-        }
-
-        const findWorker = await User.findOneBy({
-            email: emailWorker
+        } 
+        
+        const appointmentWorker = await Appointment.find({
+            where: {
+                date,
+                shift
+            },
+            relations: ["worker"]
         })
 
-        if (findWorker?.role_id !== 2) {
+        if(appointmentWorker.length == 0){
             return res.json({
                 success: true,
-                message: "Worker not found, try again."
+                message: "This appointment does not exist or is available for booking."
             });
         }
 
-        const allAppointments = await Appointment.findOneBy({
-            date,
-            shift,
-            worker_id: findWorker?.id
-        })
+        const mapping = appointmentWorker.map((obj) =>{  
+           const email =  obj.worker.email
+           if(email == emailWorker){
+            return obj.client_id
+           }
+        }) 
 
-        if (!allAppointments) {
+        if (idToken !== mapping[0]) {
             return res.json({
                 success: true,
-                message: "This appointment not exist"
+                message: "This appointment it's not yours"
             });
-        }
-
-        const client_id = allAppointments?.client_id
-
-        if (idToken !== client_id) {
-            return res.json({
-                success: true,
-                message: "this appointment it`s not yours"
-            });
-        }
+        } 
 
         return res.json({
             success: true,
