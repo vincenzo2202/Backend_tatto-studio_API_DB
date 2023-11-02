@@ -238,20 +238,18 @@ const updateAppointment = async (req: Request, res: Response) => {
                 message: "appointment updated not succesfully, incorrect id"
             })
         }
+ 
 
-        const getPurchaseItems = await Portfolio.find()
-        const mapPortfolio = getPurchaseItems.map((obj) => obj.name)
+        const namePortfolio = await Portfolio.findOneBy({
+            name 
+        })
 
-        if (!mapPortfolio.includes(name)) {
+        if (!namePortfolio) {
             return res.json({
                 success: true,
                 message: "the name of the item purchase doesn't exist",
             })
         }
-
-        const namePortfolio = await Portfolio.findOneBy({
-            name
-        })
 
         await Appointment.update({
             id: id
