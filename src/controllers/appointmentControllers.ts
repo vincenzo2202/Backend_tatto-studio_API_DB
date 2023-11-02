@@ -385,12 +385,8 @@ const getAllArtist = async (req: Request, res: Response) => {
                 const { worker_id, client_id, appointmentPortfolios, client,...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
-                const user = obj.client
-
-                // const user = await User.findOneBy({
-                //     id: client_id
-                // });
-
+                const user = obj.client 
+                
                 if (user) {
                     const user_email = user.email;
                     const user_name = user.full_name
