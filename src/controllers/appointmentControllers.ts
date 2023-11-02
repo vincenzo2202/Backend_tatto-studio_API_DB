@@ -7,7 +7,6 @@ const { validateEmail, validateDate, validateShift, validateString, validateAvai
 
 
 const getAllMyAppointment = async (req: Request, res: Response) => {
-
     try {
         const idToken = req.token.id
 
@@ -129,12 +128,11 @@ const createAppointment = async (req: Request, res: Response) => {
                 message: "sorry, you can't create a appointment with yourself"
             })
         }
+        const getPortfolio = await Portfolio.findOneBy({
+            name: purchase
+        })
 
-        const findPurchase = await Portfolio.find()
-
-        const mapping = findPurchase.map((obj) => obj.name)
-
-        if (!mapping.includes(purchase)) {
+        if (!getPortfolio) {
             return res.json({
                 success: true,
                 message: "the name of the item purchase doesn't exist",
@@ -148,13 +146,9 @@ const createAppointment = async (req: Request, res: Response) => {
             client_id: idToken
         }).save()
 
-        const portfolio = await Portfolio.findOneBy({
-            name: purchase
-        })
-
         await Appointment_portfolio.create({
             appointment_id: createNewAppointment.id,
-            portfolio_id: portfolio?.id
+            portfolio_id: getPortfolio?.id
         }).save()
 
         return res.json({
@@ -166,9 +160,9 @@ const createAppointment = async (req: Request, res: Response) => {
                 email: email,
                 worker: findWorkerByEmail?.full_name,
                 id: createNewAppointment.id,
-                purchase: portfolio?.name,
-                price: portfolio?.price,
-                category: portfolio?.category,
+                purchase: getPortfolio?.name,
+                price: getPortfolio?.price,
+                category: getPortfolio?.category,
                 created_at: createNewAppointment.created_at,
                 updated_at: createNewAppointment.updated_at
             }
