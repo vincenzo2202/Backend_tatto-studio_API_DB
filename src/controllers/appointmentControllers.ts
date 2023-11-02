@@ -31,23 +31,19 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
 
         const getAllMyAppointment = await Appointment.find({
             where: { client_id: idToken },
-            relations: ["appointmentPortfolios"],
+            relations: ["appointmentPortfolios", "worker"],
             skip: skip,
             take: pageSize
         })
 
-        const appointmentsUser = await Promise.all(
-
+        const appointmentsUser = await Promise.all( 
             getAllMyAppointment.map(async (obj) => {
-                const { status, worker_id, client_id, appointmentPortfolios, ...rest } = obj;
+                const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+                const getWorker = obj.worker
 
-                const getWorker = await User.findOneBy({
-                    id: worker_id
-                });
-
-                if (getWorker) {
+                if (getWorker && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
                     const full_name = getWorker.full_name
                     const email = getWorker.email;
                     const is_active = getWorker.is_active;
@@ -631,9 +627,9 @@ const appointmentValidation = async (req: Request, res: Response) => {
             date,
             shift,
             worker_id: findWorker?.id
-        }) 
+        })
 
-        if(!allAppointments){
+        if (!allAppointments) {
             return res.json({
                 success: true,
                 message: "This appointment not exist"
@@ -642,7 +638,7 @@ const appointmentValidation = async (req: Request, res: Response) => {
 
         const client_id = allAppointments?.client_id
 
-        if (idToken !== client_id){
+        if (idToken !== client_id) {
             return res.json({
                 success: true,
                 message: "this appointment it`s not yours"

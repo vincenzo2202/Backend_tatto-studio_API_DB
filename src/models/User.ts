@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Role } from "./Role" 
+import { Appointment } from "./Appointment"
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -35,33 +36,12 @@ export class User extends BaseEntity {
     @JoinColumn ({name: "role_id"})
     role!: Role;
  
+    @OneToMany(() => Appointment, (appointment) => appointment.client)
+    clientAppointments!: Appointment[]; 
 
-    @ManyToMany(() => User)
-    @JoinTable({
-        name: "appointment",
-        joinColumn: {
-            name: "client_id",
-            referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-            name: "worker_id",
-            referencedColumnName: "id"
-        }
-    })
-    clientWorkers!: User[]
+    @OneToMany(() => Appointment, (appointment) => appointment.worker)
+    workerAppointments!: Appointment[]; 
 
-    @ManyToMany(() => User)
-    @JoinTable({
-        name: "appointment",
-        joinColumn: {
-            name: "worker_id",
-            referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-            name: "client_id",
-            referencedColumnName: "id"
-        }
-    })
-    workerClients!: User[]
+
 
 }

@@ -16,6 +16,4 @@ appointmentRoutes.get('/appointmentDetail',auth, getAppointmentDetail)
 appointmentRoutes.get('/validation',auth, appointmentValidation)
 
 
-
-
 export {appointmentRoutes}

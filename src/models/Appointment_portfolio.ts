@@ -1,4 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
+import { Appointment } from "./Appointment"
+import { Portfolio } from "./Portfolio"
 
 @Entity("appointment_portfolio")
 export class Appointment_portfolio extends BaseEntity {
@@ -16,6 +18,14 @@ export class Appointment_portfolio extends BaseEntity {
 
     @Column()
     updated_at!: Date
+
+    @ManyToOne(() => Appointment, (appointment) => appointment.appointment_portfolios)
+    @JoinColumn({ name: "appointment_id" })  
+    appointment!: Appointment[];
+
+    @ManyToOne(() => Portfolio, (portfolio) => portfolio.appointment_portfolios)
+    @JoinColumn({ name: "appointment_id" })  
+    portfolio!: Portfolio[];
 
   
     }
