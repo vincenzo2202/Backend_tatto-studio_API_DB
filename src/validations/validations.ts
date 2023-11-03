@@ -71,8 +71,6 @@ const validateString = (string: string, length: number) => {
 };
 
 const validateAvailableDate = async (date: string, emailWorker: string, shift: string, idToken:number) => {
-
-   
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
@@ -111,7 +109,6 @@ const validateAvailableDate = async (date: string, emailWorker: string, shift: s
             message: "this appointment it's not available, try again"
         };
     }
-
     return { isValid: true };
 };
 

@@ -14,11 +14,11 @@ import { AppointmentPortfolioTableMigration1698496932444 } from "./migration/169
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: process.env.DB_HOST || "localhost",
-    port: parseInt(process.env.DB_PORT as string) || 3306,
-    username: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "1234",
-    database: process.env.DB_NAME || "tattoo_studio_backend_db",
+    host: process.env.DB_HOST  ,
+    port: parseInt(process.env.DB_PORT as string) ,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     entities: [Appointment, Appointment_portfolio, Portfolio, Role, User],
     migrations: [RolesTableMigration1698496675919, UsersTableMigration1698496766134, AppointmentsTableMigration1698496826651, PortfolioTableMigration1698496868123, AppointmentPortfolioTableMigration1698496932444
     ],
