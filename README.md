@@ -361,38 +361,37 @@ This project is under the MIT License. Please refer to the LICENSE file for more
 
 This project has been made possible thanks to the hard work of my teachers Daniel Tarazona and David Ochando, who not only share their knowledge but also instill enthusiasm in us for what we are developing.
 
-<div align="center"> 
-<div style="display: inline-block; margin-right: 50px;">
-<strong>Daniel Tarazona</strong>
-</div>
-<div style="display: inline-block;">
-<strong>David Ochando</strong>
-</div> 
-
+  
+<strong>Daniel Tarazona</strong><br>
 <a href="https://github.com/datata">
 <img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red" style="margin-right: 60px;" />
 </a>
+  
+<strong>David Ochando</strong><br>
 <a href="https://github.com/Dave86dev">
 <img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" style="margin-right: 0px;" />
 </a> 
-</div> 
-
+  
 ## 📝 Author
 
 - **Vincenzo Donnarumma Veitia**
 
-## 📧 Contact  
-<div align="center">
-<a href = "mailto:vincenzodonnarumma22@gmail.com"><img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
-<a href="https://www.linkedin.com/in/vincenzo2202/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank" ></a> 
-<a href="https://github.com/vincenzo2202">
-    <img src= "	https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
+## 📧 Contact   
+<a href = "mailto:vincenzodonnarumma22@gmail.com"  target="_blank">
+<img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank">
 </a>
-</div>
+<a href="https://github.com/vincenzo2202"  target="_blank">
+    <img src= "https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"  target="_blank"/>
+</a>  
+<a href="https://www.linkedin.com/in/vincenzo2202/" target="_blank">
+<img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank" >
+</a> 
 
 [<img src="./assets/top.png" width="60"  align="right"/>](#) 
+ 
+
 ## 📷 Images
-<br>
+
 <br>
 <div style="text-align: center;">
     <img src="./assets/img1.png" />
