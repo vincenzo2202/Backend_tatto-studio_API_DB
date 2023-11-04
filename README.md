@@ -1,9 +1,9 @@
 ###### 
 
 <h1 align="center"> 💥 Backend Tattoo Studio 💥</h1>
-
-<div style="text-align: center;"><img src= "./assets/tattoo_logo.jpg" width="600"/></div>
-
+ 
+<div style="text-align: center;"><img src= "./assets/tattoo_logo.jpg" width="800"/></div>
+ 
 <br>
 <p align="center"><a href="https://vincenzo2202.github.io/MasterMind-GH-project2/">https://github.com/vincenzo2202/Backend_tatto-studio_API_DB.git</a></p> 
 
@@ -40,7 +40,7 @@ Developed as part of the fourth project in the Full Stack Developer Bootcamp at 
 </details>
 
 ## 💡 Objetive
-Este proyecto requería una API funcional conectada a una base de datos con al menos una relación de uno a muchos y una relación de muchos a muchos.
+This project required a functional API connected to a database with at least a one-to-many relationship and a many-to-many relationship.
 
 <div style="text-align: center;">
     <img src="./assets/diagram.png" style="width: 500;" />
@@ -362,7 +362,7 @@ This project is under the MIT License. Please refer to the LICENSE file for more
 This project has been made possible thanks to the hard work of my teachers Daniel Tarazona and David Ochando, who not only share their knowledge but also instill enthusiasm in us for what we are developing.
 
 <div align="center"> 
-<div style="display: inline-block; margin-right: 20px;">
+<div style="display: inline-block; margin-right: 50px;">
 <strong>Daniel Tarazona</strong>
 </div>
 <div style="display: inline-block;">
@@ -370,10 +370,10 @@ This project has been made possible thanks to the hard work of my teachers Danie
 </div> 
 
 <a href="https://github.com/datata">
-<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red" style="margin: 10px;" />
+<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red" style="margin-right: 60px;" />
 </a>
 <a href="https://github.com/Dave86dev">
-<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" style="margin: 10px;" />
+<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" style="margin-right: 0px;" />
 </a> 
 </div> 
 
