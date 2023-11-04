@@ -1,79 +1,104 @@
-<h1 align="center"> 🕹️Backend Tattoo Studio🕹️</h1>
-<h3 align="center"> By Vincenzo Donnarumma</h3>
+###### 
 
-<p align="center"><a href="https://vincenzo2202.github.io/MasterMind-GH-project2/">https://github.com/vincenzo2202/Backend_tatto-studio_API_DB.git</a></p>
+<h1 align="center"> 💥 Backend Tattoo Studio 💥</h1>
+
+<div style="text-align: center;"><img src= "./assets/tattoo_logo.jpg" width="600"/></div>
 
 <br>
+<p align="center"><a href="https://vincenzo2202.github.io/MasterMind-GH-project2/">https://github.com/vincenzo2202/Backend_tatto-studio_API_DB.git</a></p> 
+
+# Welcome to my  backend app
 Developed as part of the fourth project in the Full Stack Developer Bootcamp at Geekshubs Academy.
 
-# Welcome to my backend app
+<div style="text-align: center;">
+    <img src="./assets/GeeksHubs-Academy-Card.png" style="max-height: 120px; width: 600;" />
+</div>
+
+
+<br>
+
+## Project content 
 
 <details>
   <summary>Contents 📝</summary>
 <ol>
-  <li><a href="#objetive">Objective</a></li>
-  <li><a href="#about-the-project">About the Project</a></li>
-  <li><a href="#deploy-🚀">Deploy</a></li>
-  <li><a href="#stack">Stack</a></li>
-  <li><a href="#diagrama-bd">Database Diagram</a></li>
-  <li><a href="#instalación-en-local">Local Installation</a></li>
-  <li><a href="#endpoints">Endpoints</a></li>
-  <li><a href="#futuras-funcionalidades">Future Functionalities</a></li>
-  <li><a href="#contribuciones">Contributions</a></li>
-  <li><a href="#licencia">License</a></li>
-  <li><a href="#webgrafia">References</a></li>
-  <li><a href="#desarrollo">Development</a></li>
-  <li><a href="#agradecimientos">Acknowledgments</a></li>
-  <li><a href="#contacto">Contact</a></li>
+  <a href="#"></a></li>
+  <li><a href="#💡-objetive">Objective</a></li>
+  <li><a href="#📑-about-the-project">About the Project</a></li> 
+  <li><a href="#💻-stack">Stack</a></li>
+  <li><a href="#📐-diagrama-db">Diagram Database</a></li>
+  <li><a href="#📜-local-installation">Local Installation</a></li>
+  <li><a href="#🚀-endpoints">Endpoints</a></li>
+  <li><a href="#🔜-future-functionalities">Future Functionalities</a></li>
+  <li><a href="#💁-contributions">Contributions</a></li>
+  <li><a href="#⚖️-license">License</a></li>  
+  <li><a href="#👏-acknowledgments">Acknowledgments</a></li>
+  <li><a href="#📧-contact">Contact</a></li>
+  <li><a href="#📷-images">Imagenes</a></li>
 </ol>
 
 </details>
 
-## Objetive
+## 💡 Objetive
 Este proyecto requería una API funcional conectada a una base de datos con al menos una relación de uno a muchos y una relación de muchos a muchos.
 
-## About the project
+<div style="text-align: center;">
+    <img src="./assets/diagram.png" style="width: 500;" />
+</div>
+
+## 📑 About the project
 I have decided to develop a backend system to support a tattoo shop. This system will allow the shop to register and manage users, making the login process easier for both customers and employees. Additionally, the system will enable the creation and tracking of new appointments for customers and artists, thus improving efficiency in tattoo scheduling.
 
 The system will also include advanced features for the superadministrator, who will have the ability to manage roles, delete users, and track all active appointments in the shop. This solution will provide a more organized and effective workflow for the management of appointments and users, enhancing the experience for both shop staff and customers.  
 
-## Stack
-Tecnologías utilizadas:
+<div style="text-align: center;"><img src= "./assets/vs_index_json.png"/></div>
+
+
+
+## 💻 Stack
 <div align="center">
-<a href="https://www.mongodb.com/">
-    <img src= "https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white"/>
-</a>
-<a href="https://www.expressjs.com/">
-    <img src= "https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB"/>
-</a>
-<a href="https://nodejs.org/es/">
-    <img src= "https://img.shields.io/badge/node.js-026E00?style=for-the-badge&logo=node.js&logoColor=white"/>
-</a>
-<a href="https://developer.mozilla.org/es/docs/Web/JavaScript">
-    <img src= "https://img.shields.io/badge/javascipt-EFD81D?style=for-the-badge&logo=javascript&logoColor=black"/>
-</a>
+
+<img src= "https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white"/>
+<img src= "https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white"/>
+<img src= "https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white"/>
+<img src= "https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white"/>
+<img src= "https://img.shields.io/badge/node.js-026E00?style=for-the-badge&logo=node.js&logoColor=white"/>
+<img src= "https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB"/>
+<img src= "https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens"/>
+<img src= "https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD"/>
+<img src= "./assets/typeorm.png" style="height: 28"/>
+<img src= "https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white"/>
+
  </div>
 
-## Diagrama BD
-!['imagen-db'](./assets/db_diagram.png)
+## 📐 Diagrama DB 
+In the diagram, we can observe that each user can only have one role, including 'user' for store customers, 'admin' for employees, and 'superadmin' for those who acquire the role of managing the application, possibly the store manager.
 
-## Instalación en local
+On the other hand, each customer can make a reservation, and thanks to the validations, it has been ensured that they do not overlap with any other customer if the tattoo artist already has a reservation for that date or time, preventing the reservation system from becoming overloaded.
+
+The tattoo artist can track the appointments assigned to them, with the ability to paginate them and view detailed information for each appointment.
+
+<div style="text-align: center;">
+ <img src= "./assets/db_diagram.png" style="height: 600"/>
+</div>
+
+## 📜 Local Installation
 
 <details>
-<summary>Instalacion</summary>
+<summary>Installation</summary>
 
-1. Clonar el repositorio.
+1. Clone the repository.
 
-2. Instalamos las que vamos a utilizar en el proyecto. 
+2. Install the dependencies required for the project. 
 
     - ` $ npm install ` 
     
-    o en su defecto se ejecuta la instalación con todas las dependencias:
+    Alternatively, you can install all the dependencies with the following command:
 
     - ` $ npm i express typescript nodemon ts-node @types/express @types/node mysql2 reflect-metadata typeorm bcrypt @types/bcrypt jsonwebtoken @types/jsonwebtoken dotenv` 
 
 
-2. Conectamos nuestro repositorio con la base de datos creando el archivo .env y colocando las credenciales correspondientes a la DB
+3. Connect your repository to the database by creating the .env file and adding the appropriate database credentials:
 
 ``` js
         // DB Credentials
@@ -87,17 +112,14 @@ Tecnologías utilizadas:
         JWT_SECRET= ""
 
 ```  
-4.  Ejecutamos las migraciones 
-
-     - `$ npx typeorm-ts-node-commonjs migration:run -d ./src/db.ts`
-
-5. $ Ejecutamos los seeders 
-
-6. ``` $ npm run dev ``` 
-7. ...
+4.  Run the migrations:
+    - `$ npx typeorm-ts-node-commonjs migration:run -d ./src/db.ts`
+5. $ Run the seeders 
+6. Execute the application with the following command: 
+    - ` $ npm run dev ` 
 </details>
 
-## Endpoints
+## 🚀 Endpoints 
 <details>
 <summary>USERS ENDPOINTS</summary>
 
@@ -124,12 +146,11 @@ Tecnologías utilizadas:
                 "password": "princes1234@" 
             }
         ```
-
     - PROFILE
 
             GET http://localhost:4000/user/profile
 
-        - Auth: ` Introduce el token para acceder al perfil`
+        - Auth: ` Enter the token to access the profile.`
 
     - UPDATE
 
@@ -142,13 +163,13 @@ Tecnologías utilizadas:
                 "phone_number": 55555559
             }
         ```
-        - Auth: ` Introduce el token para actualizar`
+        - Auth: `Enter the token to update.`
 
     - GET ALL WORKER
 
             GET http://localhost:4000/user/AllWorkers?skip=5&page=1
         
-        - Auth: ` Introduce el token para obtener la lista de trabajadores`
+        - Auth: ` Enter the token to get the list of workers.`
 
 </details>
 <details>
@@ -167,7 +188,7 @@ Tecnologías utilizadas:
                 "name": "dragon"
             }
         ```
-        - Auth: `Introduce el token para crear la cita`
+        - Auth: `Enter the token to create the appointment.`
 
     - UPDATE
 
@@ -182,7 +203,7 @@ Tecnologías utilizadas:
                 "name":"tattoo2"
             }
         ```
-         - Auth: `Introduce el token para actualizar la cita`
+         - Auth: `Enter the token to update the appointment.`
 
     - DELETE
 
@@ -193,19 +214,19 @@ Tecnologías utilizadas:
                "id": 60 
             }
         ```
-         - Auth: `Introduce el token para borrar la cita`
+         - Auth: `Enter the token to delete the appointment.`
 
     - GET ALL APPOINTMENTS BY USER
 
             GET http://localhost:4000/appointment/getAllAppointment?skip=10&page=1
         
-         - Auth: `Introduce el token para obtener la cita`
+         - Auth: `Enter the token to retrieve the appointments.`
 
     - GET ALL APPOINTMENTS BY WORKER
 
             GET http://localhost:4000/appointment/getAllArtist?skip=5&page=1
         
-         - Auth: `Introduce el token para obtener la cita`
+         - Auth: `Enter the token to get the appointments.`
     
     - APPOINTMENT DETAIL
 
@@ -216,7 +237,7 @@ Tecnologías utilizadas:
                "id": 60 
             }
         ```
-         - Auth: `Introduce el token para obtener la cita detallada`
+         - Auth: `Enter the token to get the detailed appointment`
 
     - APPOINTMENT VALIDATION
 
@@ -229,7 +250,7 @@ Tecnologías utilizadas:
                 "date":"2023-12-05"
             }
         ```
-         - Auth: `Introduce el token para validar la cita`
+         - Auth: `Enter the token to validate the appointment.`
 
 </details>
 
@@ -248,7 +269,7 @@ Tecnologías utilizadas:
                 "password": "princes1234@"
             }
         ```
-         - Auth: ` Introduce el token para obtener todos los usuarios`
+         - Auth: ` Enter the token to get all the users.`
 
     - CREATE WORKER
 
@@ -262,7 +283,7 @@ Tecnologías utilizadas:
                 "phone_number": 24364066 
             }
         ```
-         - Auth: `Introduce el token para crear el worker`
+         - Auth: `Enter the token to create the worker.`
 
     - DELETE USERS BY SUPER ADMIN
 
@@ -273,14 +294,14 @@ Tecnologías utilizadas:
                "id": 34
             }
         ```
-         - Auth: `Introduce el token para borrar cualquier usuario`
+        - Auth: `Enter the token to delete any user.`
 
     - GET ALL APPOINTMENT BY SUPER ADMIN
 
             GET http://localhost:4000/appointment/AllAppointmentsSuper?skip=5&page=1
          
         ```
-         - Auth: `Introduce el token para borrar cualquier usuario`
+    - Auth: ` Enter the token to get all the appointments.`
 
     - CHANGE ROLE BY SUPER ADMIN
 
@@ -292,88 +313,97 @@ Tecnologías utilizadas:
              "role_id": 2 
             }
         ```
-         - Auth: `Introduce el token para cambiar el role`
-
-    
+         - Auth: `Enter the token to change the role.`
 
 </details>
 
-## Futuras funcionalidades
+## 🔜 Future functionalities
 
-<details>
-[ ] Añadir create book  
-[ ] Añadir logs  con winston  
-[ ] Validaciones de la solicitud con express-validator  
-[ ] ...
-</details>
+<input type="checkbox">  Allow the tattoo artist to update appointments.
+<br>
+<input type="checkbox"> Allow the tattoo artist to update appointments.
+<br>
+<input type="checkbox"> Allow the tattoo artist to create appointments for clients.
+<br>
+<input type="checkbox"> Customized portfolio. 
+<br>
+<input type="checkbox">  Allow multiple products in one appointment.
 
-## Contribuciones
-Las sugerencias y aportaciones son siempre bienvenidas.  
 
-Puedes hacerlo de dos maneras:
 
-1. Abriendo una issue
-2. Crea un fork del repositorio
-    - Crea una nueva rama  
+## 💁 Contributions
+Suggestions and contributions are always welcome. 
+
+You can do this in two ways:
+
+1. Opening an issue.
+2. Fork the repository
+    - Create a new branch.  
         ```
-        $ git checkout -b feature/nombreUsuario-mejora
+        $ git checkout -b feature/username-improvement
         ```
-    - Haz un commit con tus cambios 
+    - Commit your changes.
         ```
-        $ git commit -m 'feat: mejora X cosa'
+        $ git commit -m 'feat: improve X thing'
         ```
-    - Haz push a la rama 
+    - Push the branch.
         ```
-        $ git push origin feature/nombreUsuario-mejora
+        $ git push origin feature/username-improvement
         ```
-    - Abre una solicitud de Pull Request
+    - Open a Pull Request.
 
-## ⚖️ Licencia
+## ⚖️ License
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para obtener más información.
+This project is under the MIT License. Please refer to the LICENSE file for more information.
 
+  
+## 👏 Acknowledgments
 
-## Webgrafia:
-Para conseguir mi objetivo he recopilado información de:
-- link a repositorios 
-- link a documentacion de librerias externas
-- ...
+This project has been made possible thanks to the hard work of my teachers Daniel Tarazona and David Ochando, who not only share their knowledge but also instill enthusiasm in us for what we are developing.
 
-## Desarrollo:
+<div align="center"> 
+<div style="display: inline-block; margin-right: 20px;">
+<strong>Daniel Tarazona</strong>
+</div>
+<div style="display: inline-block;">
+<strong>David Ochando</strong>
+</div> 
 
-``` js
- const developer = "datata";
-
- console.log("Desarrollado por: " + datata);
-```  
-
-
-
-
-## 👏 Agradecimientos
-
-Este proyecto ha sido posible gracias al arduo trabajo de mis profesores Daniel Tarazona y David Ochando, quienes no solo comparten sus conocimientos, sino que también nos inculcan y generan entusiasmo en lo que estamos desarrollando.
-
-      
-<div>
-
- **Daniel**   
 <a href="https://github.com/datata">
-    <img src= "https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red"/>
+<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=red" style="margin: 10px;" />
 </a>
-
- **David**  
 <a href="https://github.com/Dave86dev">
-    <img src= "https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white"/>
-</a>
- </div>
- 
-## 📝 Autor
+<img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" style="margin: 10px;" />
+</a> 
+</div> 
+
+## 📝 Author
 
 - **Vincenzo Donnarumma Veitia**
 
-## Contacto
-
+## 📧 Contact  
+<div align="center">
 <a href = "mailto:vincenzodonnarumma22@gmail.com"><img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
-<a href="https://www.linkedin.com/in/vincenzo2202/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
- 
+<a href="https://www.linkedin.com/in/vincenzo2202/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank" ></a> 
+<a href="https://github.com/vincenzo2202">
+    <img src= "	https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
+</a>
+</div>
+
+[<img src="./assets/top.png" width="60"  align="right"/>](#) 
+## 📷 Images
+<br>
+<br>
+<div style="text-align: center;">
+    <img src="./assets/img1.png" />
+</div>
+<br>
+<div style="text-align: center;">
+    <img src="./assets/img2.png"  />
+</div>
+<br>
+<div style="text-align: center;">
+    <img src="./assets/img3.png"  />
+</div>
+
+ [<img src="./assets/top.png" width="60"  align="right"/>](#)
