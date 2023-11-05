@@ -3,6 +3,21 @@
 import { Appointment } from "../models/Appointment";
 import { User } from "../models/User";
 
+const validateDate = (date: string) => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!date) {
+        return "you must insert a date"
+    }
+
+    if (typeof (date) !== "string") {
+        return "date incorrect, you can put only strings, try again"
+    };
+
+    if (!dateRegex.test(date)) {
+        return "date incorrect, The date format should be YYYY-MM-DD, try again"
+    };
+};
+
 const validateEmail = (email: string) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -20,35 +35,6 @@ const validateEmail = (email: string) => {
 
     if (!emailRegex.test(email)) {
         return 'Incorrect email format. Please try again'
-    };
-};
-
-const validateDate = (date: string) => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!date) {
-        return "you must insert a date"
-    }
-
-    if (typeof (date) !== "string") {
-        return "date incorrect, you can put only strings, try again"
-    };
-
-    if (!dateRegex.test(date)) {
-        return "date incorrect, The date format should be YYYY-MM-DD, try again"
-    };
-};
-
-const validateShift = (shift: string) => {
-    if (!shift) {
-        return "you must insert a shift"
-    }
-
-    if (typeof (shift) !== "string") {
-        return "shift incorrect, you can put only strings, try again"
-    };
-
-    if (shift !== "morning" && shift !== "afternoon") {
-        return "shift incorrect, you only can put morning or afternoon, try again"
     };
 };
 
@@ -70,6 +56,20 @@ const validateString = (string: string, length: number) => {
     }
 };
 
+const validateShift = (shift: string) => {
+    if (!shift) {
+        return "you must insert a shift"
+    }
+
+    if (typeof (shift) !== "string") {
+        return "shift incorrect, you can put only strings, try again"
+    };
+
+    if (shift !== "morning" && shift !== "afternoon") {
+        return "shift incorrect, you only can put morning or afternoon, try again"
+    };
+};
+ 
 const validateAvailableDate = async (date: string, emailWorker: string, shift: string, idToken:number) => {
     const today = new Date();
     const year = today.getFullYear();

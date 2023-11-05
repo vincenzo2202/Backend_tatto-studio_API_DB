@@ -23,30 +23,31 @@ Developed as part of the fourth project in the Full Stack Developer Bootcamp at 
   <summary>Contents 📝</summary>
 <ol>
   <a href="#"></a></li>
-  <li><a href="#💡-objetive">Objective</a></li>
-  <li><a href="#📑-about-the-project">About the Project</a></li> 
-  <li><a href="#💻-stack">Stack</a></li>
-  <li><a href="#📐-diagrama-db">Diagram Database</a></li>
-  <li><a href="#📜-local-installation">Local Installation</a></li>
-  <li><a href="#🚀-endpoints">Endpoints</a></li>
-  <li><a href="#🔜-future-functionalities">Future Functionalities</a></li>
-  <li><a href="#💁-contributions">Contributions</a></li>
-  <li><a href="#⚖️-license">License</a></li>  
-  <li><a href="#👏-acknowledgments">Acknowledgments</a></li>
-  <li><a href="#📧-contact">Contact</a></li>
-  <li><a href="#📷-images">Imagenes</a></li>
+  <li><a href="#objetive">Objective</a></li>
+  <li><a href="#about-the-project">About the Project</a></li> 
+  <li><a href="#stack">Stack</a></li>
+  <li><a href="#diagrama-db">Diagram Database</a></li>
+  <li><a href="#local-installation">Local Installation</a></li>
+  <li><a href="#endpoints">Endpoints</a></li>
+  <li><a href="#validations">Validations</a></li>
+  <li><a href="#future-functionalities">Future Functionalities</a></li>
+  <li><a href="#contributions">Contributions</a></li>
+  <li><a href="#license">License</a></li>  
+  <li><a href="#acknowledgments">Acknowledgments</a></li>
+  <li><a href="#contact">Contact</a></li>
+  <li><a href="#images">Imagenes</a></li>
 </ol>
 
 </details>
 
-## 💡 Objetive
+## Objetive
 This project required a functional API connected to a database with at least a one-to-many relationship and a many-to-many relationship.
 
 <div style="text-align: center;">
     <img src="./assets/diagram.png" style="width: 500;" />
 </div>
 
-## 📑 About the project
+## About the project
 I have decided to develop a backend system to support a tattoo shop. This system will allow the shop to register and manage users, making the login process easier for both customers and employees. Additionally, the system will enable the creation and tracking of new appointments for customers and artists, thus improving efficiency in tattoo scheduling.
 
 The system will also include advanced features for the superadministrator, who will have the ability to manage roles, delete users, and track all active appointments in the shop. This solution will provide a more organized and effective workflow for the management of appointments and users, enhancing the experience for both shop staff and customers.  
@@ -55,7 +56,7 @@ The system will also include advanced features for the superadministrator, who w
 
 
 
-## 💻 Stack
+## Stack
 <div align="center">
 
 <img src= "https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white"/>
@@ -71,7 +72,7 @@ The system will also include advanced features for the superadministrator, who w
 
  </div>
 
-## 📐 Diagrama DB 
+## Diagrama DB 
 In the diagram, we can observe that each user can only have one role, including 'user' for store customers, 'admin' for employees, and 'superadmin' for those who acquire the role of managing the application, possibly the store manager.
 
 On the other hand, each customer can make a reservation, and thanks to the validations, it has been ensured that they do not overlap with any other customer if the tattoo artist already has a reservation for that date or time, preventing the reservation system from becoming overloaded.
@@ -82,7 +83,7 @@ The tattoo artist can track the appointments assigned to them, with the ability 
  <img src= "./assets/db_diagram.png" style="height: 600"/>
 </div>
 
-## 📜 Local Installation
+## Local Installation
 
 <details>
 <summary>Installation</summary>
@@ -119,7 +120,7 @@ The tattoo artist can track the appointments assigned to them, with the ability 
     - ` $ npm run dev ` 
 </details>
 
-## 🚀 Endpoints 
+## Endpoints 
 <details>
 <summary>USERS ENDPOINTS</summary>
 
@@ -317,7 +318,20 @@ The tattoo artist can track the appointments assigned to them, with the ability 
 
 </details>
 
-## 🔜 Future functionalities
+
+## Validations
+
+<input type="checkbox" checked>  <strong>validateDate</strong>:  Checks for the existence of a date, ensures it's a string, and has a valid date format.<br>
+<input type="checkbox" checked>  <strong>validateEmail </strong>: Verifies the existence of an email, checks that it's a string, not exceeding 100 characters, and follows the email structure.<br>
+<input type="checkbox" checked>  <strong>validateString</strong>: Ensures the existence of a string, checks it's not an empty string, and doesn't exceed the specified character limit.<br>
+<input type="checkbox" checked>  <strong>validateNumber</strong>: Validates the existence of a number and ensures it doesn't exceed the specified digit limit.<br>
+<input type="checkbox" checked>  <strong>validateShift</strong>:  Validates the existence of a shift, checks that it's a string, and its value is valid for the specified enum.<br>
+<input type="checkbox" checked>  <strong>validatePassword</strong>: Checks for the existence of a password, ensures it's a string, not exceeding 100 characters, and includes at least one lowercase letter, one uppercase letter, one symbol, and one number.<br>
+<input type="checkbox" checked>  <strong>validateAvailableDate</strong>: Checks whether the worker is available on the specified day and shift to schedule an appointment.<br>
+
+ 
+
+## Future functionalities
 
 <input type="checkbox">  Allow the tattoo artist to update appointments.
 <br>
@@ -331,7 +345,7 @@ The tattoo artist can track the appointments assigned to them, with the ability 
 
 
 
-## 💁 Contributions
+## Contributions
 Suggestions and contributions are always welcome. 
 
 You can do this in two ways:
@@ -352,12 +366,12 @@ You can do this in two ways:
         ```
     - Open a Pull Request.
 
-## ⚖️ License
+## License
 
 This project is under the MIT License. Please refer to the LICENSE file for more information.
 
   
-## 👏 Acknowledgments
+## Acknowledgments
 
 This project has been made possible thanks to the hard work of my teachers Daniel Tarazona and David Ochando, who not only share their knowledge but also instill enthusiasm in us for what we are developing.
 
@@ -372,11 +386,11 @@ This project has been made possible thanks to the hard work of my teachers Danie
 <img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=white" style="margin-right: 0px;" />
 </a> 
   
-## 📝 Author
+## Author
 
 - **Vincenzo Donnarumma Veitia**
 
-## 📧 Contact   
+## Contact   
 <a href = "mailto:vincenzodonnarumma22@gmail.com"  target="_blank">
 <img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank">
 </a>
@@ -390,7 +404,7 @@ This project has been made possible thanks to the hard work of my teachers Danie
 [<img src="./assets/top.png" width="60"  align="right"/>](#) 
  
 
-## 📷 Images
+## Images
 
 <br>
 <div style="text-align: center;">
