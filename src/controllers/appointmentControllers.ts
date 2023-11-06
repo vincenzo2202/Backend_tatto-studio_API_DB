@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment"
 import { User } from "../models/User";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 import { Portfolio } from "../models/Portfolio";
-const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber } = require('../validations/validations');
+const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validateId} = require('../validations/validations');
 
 
 const getAllMyAppointment = async (req: Request, res: Response) => {
@@ -75,7 +75,7 @@ const createAppointment = async (req: Request, res: Response) => {
 
     try {
         const idToken = req.token.id
-        const { date, shift, email, name: idPortfolio } = req.body
+        const { date, shift, email, id: idPortfolio } = req.body
 
         if (validateDate(date)) {
             return res.json({ success: true, message: validateDate(date) });
@@ -83,11 +83,11 @@ const createAppointment = async (req: Request, res: Response) => {
 
         if (validateShift(shift)) {
             return res.json({ success: true, message: validateShift(shift) });
-        }
+        }  
  
         if (validateEmail(email)) {
             return res.json({ success: true, message: validateEmail(email) });
-        }
+        } 
 
         const validationResult = await validateAvailableDate(date, email, shift);
         if (!validationResult.isValid) {
@@ -127,6 +127,11 @@ const createAppointment = async (req: Request, res: Response) => {
         const getPortfolio = await Portfolio.findOneBy({
             id: idPortfolio
         })
+        
+        if (validateId(idPortfolio, 10)) {
+        return res.json({ success: true, message: validateId(idPortfolio, 10) });
+        }
+                
 
         if (!getPortfolio) {
             return res.json({

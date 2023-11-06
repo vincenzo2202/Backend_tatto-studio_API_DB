@@ -164,6 +164,23 @@ const validatePassword = (password: string) => {
 
 };
 
+const validateId = (id: number, length: number) => {
+
+    if (!id) {
+        return "you must insert an number "
+    }
+
+    if (typeof (id) !== "number") {
+        return `you must insert a number`
+    };
+
+    const toString = id.toString()
+
+    if (toString.length > length) {
+        return `number too long, max ${length},try again`
+    }
+};
+
 module.exports = {
     validateEmail,
     validateDate,
@@ -171,5 +188,6 @@ module.exports = {
     validateString,
     validateAvailableDate,
     validateNumber,
-    validatePassword
+    validatePassword,
+    validateId
 };
