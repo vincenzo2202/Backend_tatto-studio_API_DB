@@ -54,8 +54,6 @@ The system will also include advanced features for the superadministrator, who w
 
 <div style="text-align: center;"><img src= "./assets/vs_index_json.png"/></div>
 
-
-
 ## Stack
 <div align="center">
 

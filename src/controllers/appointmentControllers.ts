@@ -75,20 +75,16 @@ const createAppointment = async (req: Request, res: Response) => {
 
     try {
         const idToken = req.token.id
-        const { date, shift, email, name: purchase } = req.body
+        const { date, shift, email, name: idPortfolio } = req.body
 
         if (validateDate(date)) {
             return res.json({ success: true, message: validateDate(date) });
-        }
+        } 
 
         if (validateShift(shift)) {
             return res.json({ success: true, message: validateShift(shift) });
         }
-
-        if (validateString(purchase, 100)) {
-            return res.json({ success: true, message: validateString(purchase, 100) });
-        }
-
+ 
         if (validateEmail(email)) {
             return res.json({ success: true, message: validateEmail(email) });
         }
@@ -129,7 +125,7 @@ const createAppointment = async (req: Request, res: Response) => {
             })
         }
         const getPortfolio = await Portfolio.findOneBy({
-            name: purchase
+            id: idPortfolio
         })
 
         if (!getPortfolio) {
