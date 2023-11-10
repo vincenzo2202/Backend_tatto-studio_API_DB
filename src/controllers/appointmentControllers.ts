@@ -78,15 +78,15 @@ const createAppointment = async (req: Request, res: Response) => {
         const { date, shift, email, id: idPortfolio } = req.body
 
         if (validateDate(date)) {
-            return res.json({ success: true, message: validateDate(date) });
+            return res.json({ success: true, message: validateDate(date) })
         } 
 
         if (validateShift(shift)) {
-            return res.json({ success: true, message: validateShift(shift) });
+            return res.json({ success: true, message: validateShift(shift) })
         }  
  
         if (validateEmail(email)) {
-            return res.json({ success: true, message: validateEmail(email) });
+            return res.json({ success: true, message: validateEmail(email) })
         } 
 
         const validationResult = await validateAvailableDate(date, email, shift);
@@ -95,7 +95,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 success: true,
                 isValid: validationResult.isValid,
                 message: validationResult.message
-            });
+            })
         }
 
         const findWorkerByEmail = await User.findOne({

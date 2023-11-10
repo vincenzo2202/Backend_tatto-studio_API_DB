@@ -14,7 +14,7 @@ import { AppointmentPortfolioTableMigration1698496932444 } from "./migration/169
 
 export const AppDataSource = new DataSource({
     type: "mysql",
-    host: process.env.DB_HOST,
+    host: process.env.DB_HOST ,
     port: parseInt(process.env.DB_PORT as string),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
