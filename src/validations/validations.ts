@@ -69,8 +69,8 @@ const validateShift = (shift: string) => {
         return "shift incorrect, you only can put morning or afternoon, try again"
     };
 };
- 
-const validateAvailableDate = async (date: string, emailWorker: string, shift: string, idToken:number) => {
+
+const validateAvailableDate = async (date: string, emailWorker: string, shift: string, idToken: number) => {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
@@ -102,7 +102,7 @@ const validateAvailableDate = async (date: string, emailWorker: string, shift: s
             isValid = false;
         }
     });
-    
+
     if (!isValid) {
         return {
             isValid: false,
@@ -181,6 +181,29 @@ const validateId = (id: number, length: number) => {
     }
 };
 
+const validatePhoto = (string: string, length: number) => {
+    if (string != undefined) {
+ 
+        if (!string) {
+            return "you must insert an name " + string
+        }
+
+        if (typeof (string) !== "string") {
+            return `you must insert a strings`
+        };
+
+
+        if (string.length == 0) {
+            return `${string} too short, try to insert a larger one, max  ${length} characters`
+        };
+
+        if (string.length > length) {
+            return `${string} too long, try to insert a shorter one, max ${length} characters`
+        }
+    }
+};
+
+
 module.exports = {
     validateEmail,
     validateDate,
@@ -189,5 +212,6 @@ module.exports = {
     validateAvailableDate,
     validateNumber,
     validatePassword,
-    validateId
+    validateId,
+    validatePhoto
 };

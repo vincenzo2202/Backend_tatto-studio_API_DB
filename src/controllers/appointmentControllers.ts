@@ -40,15 +40,17 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                 const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
                 const getWorker = obj.worker
 
                 if (getWorker && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
                     const full_name = getWorker.full_name
                     const email = getWorker.email;
                     const is_active = getWorker.is_active;
+                    const image = imagePortfolio[0]
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { full_name, email, name, category, is_active, ...rest };
+                    return { full_name,image, email, name, category, is_active, ...rest };
                 }
                 else {
                     return null
@@ -386,15 +388,17 @@ const getAllArtist = async (req: Request, res: Response) => {
                 const { worker_id, client_id, appointmentPortfolios, client, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
                 const user = obj.client
 
                 if (user) {
                     const user_email = user.email;
                     const user_name = user.full_name
                     const is_active = user.is_active;
+                    const image = imagePortfolio[0]
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { user_email, user_name, is_active, name, category, ...rest };
+                    return { user_email, user_name,image, is_active, name, category, ...rest };
                 }
                 else {
                     return null
@@ -509,14 +513,16 @@ const getAppointmentDetail = async (req: Request, res: Response) => {
             getAllMyAppointment.map(async (obj) => {
                 const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
                 const workerObj = obj.worker
 
                 if (workerObj) {
                     const worker_name = workerObj.full_name
                     const worker_email = workerObj.email;
                     const is_active = workerObj.is_active;
+                    const image = imagePortfolio[0]
                     const name = purchase[0]
-                    return { worker_name, worker_email, name, is_active, ...rest };
+                    return { worker_name,image, worker_email, name, is_active, ...rest };
                 }
                 else {
                     return null

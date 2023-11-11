@@ -2,11 +2,11 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validatePassword } = require('../validations/validations');
+const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validatePassword, validatePhoto} = require('../validations/validations');
 
 const register = async (req: Request, res: Response) => {
     try {
-        const { full_name, email, password, phone_number } = req.body
+        const { full_name, email, password, phone_number, photo } = req.body
 
         if (validateString(full_name, 50)) {
             return res.json({ success: true, message: validateString(full_name, 50) });
@@ -23,13 +23,18 @@ const register = async (req: Request, res: Response) => {
             return res.json({ success: true, message: validateNumber(phone_number, 12) });
         }
 
+        if (validatePhoto(photo, 500)) {
+            return res.json({ success: true, message: validatePhoto(photo, 500) });
+        }
+
         const encrytedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
             full_name: full_name,
             email: email,
             password: encrytedPassword,
-            phone_number: phone_number
+            phone_number: phone_number,
+            photo:photo
         }).save()
 
         return res.json({
@@ -123,7 +128,8 @@ const profile = async (req: Request, res: Response) => {
             data: {
                 full_name: profileUser?.full_name,
                 email: profileUser?.email,
-                phone_number: profileUser?.phone_number
+                phone_number: profileUser?.phone_number,
+                photo:profileUser?.photo
             }
         })
 
@@ -138,7 +144,7 @@ const profile = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
     try {
-        const { full_name, password, phone_number } = req.body
+        const { full_name, password, phone_number , photo} = req.body
         const id = req.token.id
 
         if (validateString(full_name, 50)) {
@@ -150,6 +156,10 @@ const updateUser = async (req: Request, res: Response) => {
         }
         if (validateNumber(phone_number, 12)) {
             return res.json({ success: true, message: validateNumber(phone_number, 12) });
+        } 
+
+        if (validatePhoto(photo, 500)) {
+            return res.json({ success: true, message: validatePhoto(photo, 500) });
         }
 
         const encrytedPassword = await bcrypt.hash(password, 10)
@@ -159,7 +169,8 @@ const updateUser = async (req: Request, res: Response) => {
         }, {
             full_name: full_name,
             password: encrytedPassword,
-            phone_number: phone_number
+            phone_number: phone_number,
+            photo: photo
         })
 
         return res.json({
@@ -214,7 +225,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 
         const mappingUsers = profileUser.map(users => {
             const { password, ...rest } = users
-            return { ...rest };
+            return {...rest};
         });
 
         return res.json({
@@ -271,7 +282,8 @@ const getAllWorkers = async (req: Request, res: Response) => {
                 return {
                     email: users.email,
                     name: users.full_name,
-                    phone_number: users.phone_number
+                    phone_number: users.phone_number,
+                    photo: users.photo
                 };
             }
         });
@@ -293,7 +305,7 @@ const getAllWorkers = async (req: Request, res: Response) => {
 
 const createWorker = async (req: Request, res: Response) => {
     try {
-        const { full_name, email, password, phone_number } = req.body;
+        const { full_name, email, password, phone_number, photo } = req.body;
 
         if (validateString(full_name, 50)) {
             return res.json({ success: true, message: validateString(full_name, 50) });
@@ -310,6 +322,10 @@ const createWorker = async (req: Request, res: Response) => {
             return res.json({ success: true, message: validateNumber(phone_number, 12) });
         }
 
+        if (validatePhoto(photo, 500)) {
+            return res.json({ success: true, message: validatePhoto(photo, 500) });
+        }
+
         const encrytedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
@@ -317,7 +333,8 @@ const createWorker = async (req: Request, res: Response) => {
             email: email,
             password: encrytedPassword,
             phone_number: phone_number,
-            role_id: 2
+            photo:photo,
+            role_id: 2 
         }).save()
 
         return res.json({
