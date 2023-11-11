@@ -280,8 +280,9 @@ const getAllWorkers = async (req: Request, res: Response) => {
         const mappingUsers = profileUser.map(users => {
             if (users.is_active == true) {
                 return {
+                    id: users.id,
                     email: users.email,
-                    name: users.full_name,
+                    full_name: users.full_name,
                     phone_number: users.phone_number,
                     photo: users.photo
                 };

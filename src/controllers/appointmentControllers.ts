@@ -30,7 +30,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
 
         const getAllMyAppointment = await Appointment.find({
             where: { client_id: idToken },
-            relations: ["appointmentPortfolios", "worker"],
+            relations: ["appointmentPortfolios", "worker"  ],
             skip: skip,
             take: pageSize
         })
@@ -40,7 +40,8 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                 const { status, worker_id, client_id, appointmentPortfolios, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
-                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image) 
+                const pricePortfolio = obj.appointmentPortfolios.map((obj) => obj.price) 
                 const getWorker = obj.worker
 
                 if (getWorker && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
@@ -48,9 +49,10 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                     const email = getWorker.email;
                     const is_active = getWorker.is_active;
                     const image = imagePortfolio[0]
+                    const price = pricePortfolio[0]
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { full_name,image, email, name, category, is_active, ...rest };
+                    return { full_name,image, email, name,price, category, is_active, ...rest };
                 }
                 else {
                     return null
