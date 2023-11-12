@@ -185,12 +185,17 @@ const createAppointment = async (req: Request, res: Response) => {
 const updateAppointment = async (req: Request, res: Response) => {
 
     try {
-        const client_id = req.token.id
-        const { id, date, shift, email, name } = req.body
+        const { id, date, shift, email, id:portfolioId } = req.body
+        const { id: client_id } = req.token
 
-        if (validateNumber(id, 10)) {
-            return res.json({ success: true, message: validateNumber(id) });
+        if (validateNumber(id, 7)) {
+            return res.json({ success: true, message: validateNumber(id, 7) });
         }
+
+        if (validateNumber(portfolioId, 7)) {
+            return res.json({ success: true, message: validateNumber(portfolioId, 7) });
+        }
+
         if (validateDate(date)) {
             return res.json({ success: true, message: validateDate(date) });
         }
@@ -199,9 +204,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             return res.json({ success: true, message: validateShift(shift) });
         }
 
-        if (validateString(name, 50)) {
-            return res.json({ success: true, message: validateString(name, 100) });
-        }
 
         if (validateEmail(email)) {
             return res.json({ success: true, message: validateEmail(email) });
@@ -211,7 +213,6 @@ const updateAppointment = async (req: Request, res: Response) => {
         if (!validationResult.isValid) {
             return res.json({
                 success: true,
-                isValid: validationResult.isValid,
                 message: validationResult.message
             });
         }
@@ -233,23 +234,22 @@ const updateAppointment = async (req: Request, res: Response) => {
             client_id,
         })
 
-        const mapping = await appointmentsClient.map((object) =>
+        const appointmentsId = await appointmentsClient.map((object) =>
             object.id
         )
 
-        if (!mapping.includes(id)) {
+        if (!appointmentsId.includes(id)) {
             return res.json({
                 success: true,
                 message: "appointment updated not succesfully, incorrect id"
             })
         }
 
-
-        const namePortfolio = await Portfolio.findOneBy({
-            name
+        const product = await Portfolio.findOneBy({
+            id:portfolioId
         })
 
-        if (!namePortfolio) {
+        if (!product) {
             return res.json({
                 success: true,
                 message: "the name of the item purchase doesn't exist",
@@ -257,7 +257,7 @@ const updateAppointment = async (req: Request, res: Response) => {
         }
 
         await Appointment.update({
-            id: id
+            id
         }, {
             date,
             shift,
@@ -267,32 +267,33 @@ const updateAppointment = async (req: Request, res: Response) => {
         await Appointment_portfolio.update({
             appointment_id: id
         }, {
-            portfolio_id: namePortfolio?.id
+            portfolio_id: product?.id
         })
 
-        const appointmentUpdated = await Appointment.findOneBy({
-            id: id
+        const dataAppointmentUpdated = await Appointment.findOneBy({
+            id
         })
 
         return res.json({
             success: true,
-            message: "Appointment created succesfully",
+            message: "appointment created succesfully",
             data: {
                 date,
                 shift,
-                Worker: findWorker_id?.full_name,
+                workerName: findWorker_id?.full_name,
                 email,
-                id: id,
-                name,
-                category: namePortfolio?.category,
-                created_at: appointmentUpdated?.created_at,
-                updated_at: appointmentUpdated?.updated_at
+                id,
+                category: product?.category,
+                portfolioId: product?.id,
+                created_at: dataAppointmentUpdated?.created_at,
+                updated_at: dataAppointmentUpdated?.updated_at
             }
         })
+
     } catch (error) {
         return res.json({
             success: false,
-            message: "Appointment can't be updated, try again",
+            message: "appointment can't be updated, try again",
             error
         })
     }
