@@ -44,6 +44,9 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                 const pricePortfolio = obj.appointmentPortfolios.map((obj) => obj.price) 
                 const getWorker = obj.worker
 
+                console.log(imagePortfolio);
+                
+
                 if (getWorker && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
                     const full_name = getWorker.full_name
                     const email = getWorker.email;
@@ -52,7 +55,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                     const price = pricePortfolio[0]
                     const name = purchase[0]
                     const category = categoryPortfolio[0]
-                    return { full_name,image, email, name,price, category, is_active, ...rest };
+                    return { full_name, image, email, name,price, category, is_active, ...rest };
                 }
                 else {
                     return null
@@ -247,6 +250,9 @@ const updateAppointment = async (req: Request, res: Response) => {
                 message: "appointment updated not succesfully, incorrect id"
             })
         }
+
+        console.log(appointmentsId.includes(id));
+        
 
         const product = await Portfolio.findOneBy({
             id:portfolioId
@@ -466,6 +472,8 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
             .map(async (obj) => {
                 const { worker_id, client_id, appointmentPortfolios, client, worker, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const priceproduct = obj.appointmentPortfolios.map((obj) => obj.price)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const user = obj.client
                 const workerObj = obj.worker
@@ -477,8 +485,10 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
                     const worker_email = workerObj.email;
                     const worker_name = workerObj.full_name;
                     const name = purchase[0]
+                    const price = priceproduct[0]
+                    const image = imagePortfolio[0]
                     const category = categoryPortfolio[0]
-                    return { is_active, user_email, user_name, worker_email, worker_name, name, category, ...rest, };
+                    return { is_active, user_email,image, user_name, worker_email, worker_name, name, category,price, ...rest, };
                 }
                 else {
                     return null
