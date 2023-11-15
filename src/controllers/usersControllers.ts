@@ -2,6 +2,7 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Portfolio } from "../models/Portfolio";
 const { validateEmail, validateDate, validateShift, validateString, validateAvailableDate, validateNumber, validatePassword, validatePhoto} = require('../validations/validations');
 
 const register = async (req: Request, res: Response) => {
@@ -436,4 +437,53 @@ const assignRole = async (req: Request, res: Response) => {
     }
 }
 
-export { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin, assignRole } 
+const getPortfolio = async (req: Request, res: Response) => {
+    try {
+        if (typeof (req.query.skip) !== "string") {
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
+
+        if (typeof (req.query.page) !== "string") {
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page: any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+        const portfolio = await Portfolio.find({ 
+            skip: skip,
+            take: pageSize
+        });
+
+        if (portfolio.length == 0) {
+            return res.json({
+                success: false,
+                message: "there are not any registered worker"
+            })
+        }
+
+ 
+
+        return res.json({
+            success: true,
+            message: "here you have all workers",
+            data: portfolio
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "workers can't be retrieved",
+            error
+        })
+    }
+}
+
+export { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin, assignRole,getPortfolio } 

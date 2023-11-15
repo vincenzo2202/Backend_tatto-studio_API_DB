@@ -660,4 +660,7 @@ const appointmentValidation = async (req: Request, res: Response) => {
     }
 }
 
+
+
+
 export { createAppointment, updateAppointment, deleteAppointment, getAllMyAppointment, getAllArtist, getallAppointmentSuperAdmin, getAppointmentDetail, appointmentValidation }

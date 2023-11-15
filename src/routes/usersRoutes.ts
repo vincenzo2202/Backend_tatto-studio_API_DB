@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin, assignRole } from "../controllers/usersControllers";
+import { register, login, profile, updateUser, getAllUsers, getAllWorkers, createWorker, deleteUserBySuperAdmin, assignRole, getPortfolio } from "../controllers/usersControllers";
 import { auth } from "../middleware/auth";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
@@ -14,5 +14,6 @@ userRoutes.get('/allWorkers', getAllWorkers)
 userRoutes.post('/createWorker', auth, isSuperAdmin, createWorker)
 userRoutes.delete('/deleteUser', auth, isSuperAdmin, deleteUserBySuperAdmin)
 userRoutes.put('/assignRole', auth,isSuperAdmin, assignRole)
+userRoutes.get('/portfolio', getPortfolio)
 
 export { userRoutes }
