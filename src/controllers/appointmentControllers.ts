@@ -42,9 +42,7 @@ const getAllMyAppointment = async (req: Request, res: Response) => {
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image) 
                 const pricePortfolio = obj.appointmentPortfolios.map((obj) => obj.price) 
-                const getWorker = obj.worker
-
-                console.log(imagePortfolio);
+                const getWorker = obj.worker 
                 
 
                 if (getWorker && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
@@ -480,7 +478,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
 
                 if (user && worker) {
                     const user_email = user.email;
-                    const user_name = user.full_name;
+                    const username = user.full_name;
                     const is_active = user.is_active;
                     const worker_email = workerObj.email;
                     const worker_name = workerObj.full_name;
@@ -488,7 +486,7 @@ const getallAppointmentSuperAdmin = async (req: Request, res: Response) => {
                     const price = priceproduct[0]
                     const image = imagePortfolio[0]
                     const category = categoryPortfolio[0]
-                    return { is_active, user_email,image, user_name, worker_email, worker_name, name, category,price, ...rest, };
+                    return { is_active, user_email,image, username, worker_email, worker_name, name, category,price, ...rest, };
                 }
                 else {
                     return null

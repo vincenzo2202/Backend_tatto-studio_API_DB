@@ -94,7 +94,7 @@ const login = async (req: Request, res: Response) => {
             email: loginByEmail.email,
             role: roles
         }, secret, {
-            expiresIn: "3h"
+            expiresIn: "1h"
         })
 
         return res.json({
